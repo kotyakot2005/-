@@ -179,15 +179,15 @@
             opacity: 0.5;
             cursor: default;
         }
-        /* Стили для "найди лишнее" */
-        .items-grid {
+        /* Стили для мультивыбора (кухня) */
+        .multiselect-grid {
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
             justify-content: center;
             margin: 20px 0;
         }
-        .food-item {
+        .multi-item {
             background: #e8dcc2;
             padding: 15px 20px;
             border-radius: 40px;
@@ -195,9 +195,13 @@
             text-align: center;
             transition: 0.1s;
             font-weight: 500;
+            flex: 1;
+            min-width: 140px;
         }
-        .food-item:hover { background: #dbbc87; transform: scale(1.02); }
-        .food-item.selected-wrong { background: #f3cfc0; border: 2px solid #b3432c; text-decoration: line-through; }
+        .multi-item:hover { background: #dbbc87; transform: scale(1.02); }
+        .multi-item.selected-correct { background: #a8c9a3; border: 2px solid #2c6e2c; }
+        .multi-item.selected-wrong { background: #f3cfc0; border: 2px solid #b3432c; text-decoration: line-through; }
+        .multi-item.disabled { opacity: 0.6; cursor: default; pointer-events: none; }
         /* Стили для сопоставления */
         .match-area {
             display: flex;
@@ -295,7 +299,7 @@
 
 <script>
     // ============================================================
-    // 8 ВОПРОСОВ (2-е — true/false про верования)
+    // 8 ВОПРОСОВ (6-й исправлен, 7-й переделан в сложный мультивыбор)
     // ============================================================
     const questions = [
         {
@@ -348,23 +352,32 @@
             explanation: "🧬 Историки спорят до сих пор: возможно, меря — отдельный финно-угорский народ, близкий марийцам по языку и культуре, но живший на территории современных Ярославской и Ивановской областей."
         },
         {
-            type: 'oddone',
-            text: "🍲 Вас пригласили на марийское застолье. Найдите блюдо, которого НЕТ в традиционной марийской кухне — кликните на лишнее.",
-            items: ["Вареники с мясом", "Пироги с конопляным семенем", "Борщ с пампушками", "Вяленая колбаса из конины"],
-            correctIndex: 2,
-            explanation: "🥣 Борщ и пампушки — заимствованные блюда. Аутентичная кухня марийцев включала мясо белки, ужа, филина, пельмени, колбасу из конины и лепёшки из конопляного семени."
-        },
-        {
             type: 'choice',
-            text: "🏞️ Вы встречаете группу, которая называет себя «кырык мары». Кто они и где живут?",
+            text: "🏞️ Вы встречаете группу, которая называет себя «кырык мары». Кто они?",
             options: [
-                "А) Луговые марийцы (Олык марий) — в междуречье Волги и Вятки",
-                "Б) Восточные марийцы (Эрвел мари) — в Башкирии",
-                "В) Горные марийцы — на правом берегу Волги",
-                "Г) Северо-западные марийцы — в Кировской области"
+                "А) Луговые марийцы",
+                "Б) Восточные марийцы",
+                "В) Горные марийцы",
+                "Г) Северо-западные марийцы"
             ],
             correct: 2,
-            explanation: "🏔️ Кырык мары — горные марийцы. Их название происходит от «кырык» (гора). Они живут на правом, возвышенном берегу Волги и дольше контактировали с чувашами и русскими."
+            explanation: "🏔️ Кырык мары — горные марийцы. Их название происходит от «кырык» (гора). Они живут на правом, возвышенном берегу Волги."
+        },
+        {
+            type: 'multiselect',
+            text: "🍲 Традиционная марийская кухня уникальна и самобытна. Какие из этих продуктов ИНГРЕДИЕНТЫ действительно использовались в аутентичных марийских блюдах? Выберите ВСЕ правильные варианты.",
+            items: [
+                { name: "Мясо белки", correct: true },
+                { name: "Конопляное семя", correct: true },
+                { name: "Мясо ужа", correct: true },
+                { name: "Мясо филина", correct: true },
+                { name: "Картофель", correct: false },
+                { name: "Говядина", correct: false },
+                { name: "Помидоры", correct: false },
+                { name: "Свинина", correct: false }
+            ],
+            explanation: "📖 Аутентичная кухня марийцев включала мясо белки, ужа, филина, пельмени, колбасу из конины, лепёшки из конопляного семени. Картофель, помидоры, говядина и свинина появились позже под влиянием других культур.",
+            feedback: "Отлично! Вы хорошо разбираетесь в марийской кулинарной традиции."
         },
         {
             type: 'matching',
@@ -402,8 +415,8 @@
     
     // Состояния для интерактивных заданий
     let tfState = { answers: [] };
+    let multiState = { selected: [] };
     let matchState = { selectedLeft: null, matchedPairs: [] };
-    let oddSelected = false;
 
     const dynamicDiv = document.getElementById('dynamicContent');
     const scoreSpan = document.getElementById('scoreValue');
@@ -438,7 +451,7 @@
         answerLocked = false;
         if (q.type === 'choice') renderChoiceQuestion(q);
         else if (q.type === 'truefalse') renderTrueFalseQuestion(q);
-        else if (q.type === 'oddone') renderOddOneQuestion(q);
+        else if (q.type === 'multiselect') renderMultiSelectQuestion(q);
         else if (q.type === 'matching') renderMatchingQuestion(q);
     }
 
@@ -480,7 +493,7 @@
         nextBtn.onclick = () => { currentIndex++; renderQuestion(); };
     }
 
-    // НОВОЕ 2-Е ЗАДАНИЕ — True/False про верования
+    // 2-е задание — True/False
     function renderTrueFalseQuestion(q) {
         tfState = { answers: new Array(q.statements.length).fill(null) };
         
@@ -507,7 +520,6 @@
             grid.appendChild(div);
         });
         
-        // Добавляем обработчики кнопок
         document.querySelectorAll('.tf-true').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 if (answerLocked) return;
@@ -529,7 +541,6 @@
         function updateTfItemUI(idx, isTrue) {
             const items = document.querySelectorAll('.tf-item');
             const item = items[idx];
-            // Убираем старые классы
             item.classList.remove('answered-true', 'answered-false');
             if (isTrue) {
                 item.classList.add('answered-true');
@@ -542,7 +553,6 @@
         checkBtn.onclick = () => {
             if (answerLocked) return;
             
-            // Проверяем, что на все вопросы ответили
             const allAnswered = tfState.answers.every(a => a !== null);
             if (!allAnswered) {
                 const fb = document.getElementById('feedbackArea');
@@ -551,7 +561,6 @@
                 return;
             }
             
-            // Подсчитываем правильные ответы
             let correctCount = 0;
             const results = [];
             for (let i = 0; i < q.statements.length; i++) {
@@ -562,20 +571,17 @@
             
             answerLocked = true;
             
-            // Визуально показываем правильность
             const items = document.querySelectorAll('.tf-item');
             results.forEach(res => {
                 const item = items[res.idx];
                 item.classList.add('disabled');
                 if (!res.correct) {
-                    // Подсвечиваем неправильные ответы красноватым
                     item.style.background = '#f3cfc0';
                 } else {
                     item.style.background = '#cfe2cf';
                 }
             });
             
-            // Все ответы правильные? (нужно 5 из 5)
             const allCorrect = (correctCount === q.statements.length);
             
             if (allCorrect) { 
@@ -589,7 +595,6 @@
             const fb = document.getElementById('feedbackArea');
             let legendNote = (allCorrect && legendPieces.length) ? `<br>📜 Легенда: ${legendPieces[legendPieces.length-1]}` : '';
             
-            // Формируем детальный ответ
             let details = '';
             results.forEach(res => {
                 details += `<br>${res.correct ? '✅' : '❌'} ${q.statements[res.idx].text}<br><span style="margin-left:20px;font-size:0.85rem;">${q.statements[res.idx].explanation}</span>`;
@@ -608,32 +613,90 @@
         };
     }
 
-    function renderOddOneQuestion(q) {
-        oddSelected = false;
-        let html = `<div class="question-card"><div class="question-text">${q.text}</div><div class="items-grid" id="oddGrid"></div><div id="feedbackArea" class="feedback" style="display: none;"></div><button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Продолжить поиск легенды</button></div>`;
+    // 6-е задание (кухня) — мультивыбор
+    function renderMultiSelectQuestion(q) {
+        multiState = { selected: new Array(q.items.length).fill(false) };
+        
+        let html = `<div class="question-card"><div class="question-text">${q.text}</div>
+        <div class="multiselect-grid" id="multiGrid"></div>
+        <div id="feedbackArea" class="feedback" style="display: none;"></div>
+        <button id="checkMultiBtn" class="next-btn">✅ Проверить ответ</button>
+        <button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Продолжить поиск легенды</button>
+        </div>`;
         dynamicDiv.innerHTML = html;
-        const grid = document.getElementById('oddGrid');
+        
+        const grid = document.getElementById('multiGrid');
+        
         q.items.forEach((item, idx) => {
             const div = document.createElement('div');
-            div.className = 'food-item';
-            div.textContent = item;
+            div.className = 'multi-item';
+            div.textContent = item.name;
             div.onclick = () => {
-                if (oddSelected) return;
-                oddSelected = true;
-                const isCorrect = (idx === q.correctIndex);
-                if (isCorrect) { score += 10; addLegendPiece(true); updateStatsUI(); }
-                else addLegendPiece(false);
-                if (!isCorrect) div.classList.add('selected-wrong');
-                const fb = document.getElementById('feedbackArea');
-                let legendNote = (isCorrect && legendPieces.length) ? `<br>📜 Легенда: ${legendPieces[legendPieces.length-1]}` : '';
-                fb.innerHTML = (isCorrect ? `✅ Верно! "${q.items[q.correctIndex]}" — лишнее.<br>${q.explanation}<br>🌟 +10 знаний.${legendNote}` : `❌ Неверно. Лишнее — "${q.items[q.correctIndex]}".<br>${q.explanation}`);
-                fb.style.display = 'block';
-                document.getElementById('nextQuestBtn').style.display = 'block';
+                if (answerLocked) return;
+                // Переключаем выделение
+                if (multiState.selected[idx]) {
+                    multiState.selected[idx] = false;
+                    div.classList.remove('selected-correct', 'selected-wrong');
+                    div.style.background = "#e8dcc2";
+                } else {
+                    multiState.selected[idx] = true;
+                    div.style.background = "#c9b06b";
+                }
             };
             grid.appendChild(div);
         });
-        const nextBtn = document.getElementById('nextQuestBtn');
-        nextBtn.onclick = () => { currentIndex++; renderQuestion(); };
+        
+        const checkBtn = document.getElementById('checkMultiBtn');
+        checkBtn.onclick = () => {
+            if (answerLocked) return;
+            
+            // Проверяем правильность
+            let allCorrect = true;
+            for (let i = 0; i < q.items.length; i++) {
+                if (multiState.selected[i] !== q.items[i].correct) {
+                    allCorrect = false;
+                    break;
+                }
+            }
+            
+            answerLocked = true;
+            
+            // Визуально показываем правильные/неправильные ответы
+            const itemsDivs = document.querySelectorAll('.multi-item');
+            q.items.forEach((item, idx) => {
+                if (item.correct) {
+                    itemsDivs[idx].classList.add('selected-correct');
+                    itemsDivs[idx].style.background = "#a8c9a3";
+                } else if (multiState.selected[idx] && !item.correct) {
+                    itemsDivs[idx].classList.add('selected-wrong');
+                    itemsDivs[idx].style.background = "#f3cfc0";
+                }
+                itemsDivs[idx].classList.add('disabled');
+            });
+            
+            if (allCorrect) { 
+                score += 10; 
+                addLegendPiece(true); 
+                updateStatsUI();
+            } else {
+                addLegendPiece(false);
+            }
+            
+            const fb = document.getElementById('feedbackArea');
+            let legendNote = (allCorrect && legendPieces.length) ? `<br>📜 Легенда: ${legendPieces[legendPieces.length-1]}` : '';
+            const correctItems = q.items.filter(i => i.correct).map(i => i.name).join(', ');
+            
+            if (allCorrect) {
+                fb.innerHTML = `✅ ${q.feedback}<br>🌟 +10 знаний.${legendNote}<br><br>${q.explanation}`;
+            } else {
+                fb.innerHTML = `❌ Не все ингредиенты выбраны верно.<br>Правильные ингредиенты: ${correctItems}.<br><br>${q.explanation}`;
+            }
+            fb.style.display = 'block';
+            checkBtn.style.display = 'none';
+            const nextBtn = document.getElementById('nextQuestBtn');
+            nextBtn.style.display = 'block';
+            nextBtn.onclick = () => { currentIndex++; renderQuestion(); };
+        };
     }
 
     function renderMatchingQuestion(q) {
