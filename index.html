@@ -127,7 +127,7 @@
             justify-content: center;
             border-radius: 50%;
         }
-        /* Новый стиль для 2-го испытания — сборка снаряжения */
+        /* Стили для 2-го испытания — сборка снаряжения */
         .gear-assembly {
             display: flex;
             gap: 30px;
@@ -137,7 +137,7 @@
         }
         .gear-items {
             flex: 1;
-            min-width: 200px;
+            min-width: 220px;
             background: #e8dcc2;
             border-radius: 28px;
             padding: 20px;
@@ -163,7 +163,7 @@
         }
         .items-pool {
             flex: 1;
-            min-width: 200px;
+            min-width: 220px;
             background: #e8dcc2;
             border-radius: 28px;
             padding: 20px;
@@ -297,7 +297,7 @@
 
 <script>
     // ============================================================
-    // 8 ВОПРОСОВ (2-е испытание полностью переделано)
+    // 8 ВОПРОСОВ (все типы: choice, gears, oddone, matching)
     // ============================================================
     const questions = [
         {
@@ -314,7 +314,7 @@
         },
         {
             type: 'gears',
-            text: "🏹 Перед охотой на медведя марийский охотник должен правильно собрать своё снаряжение. Выберите из предложенных предметов ТРИ, которые действительно использовали марийцы, и разместите их в нужном порядке:",
+            text: "🏹 Перед охотой на медведя марийский охотник должен правильно собрать своё снаряжение. Выберите из предложенных предметов ТРИ, которые действительно использовали марийцы, и разместите их в нужных слотах:",
             gearSlots: [
                 { name: "Оружие для ближнего боя", description: "Чем мариец добивал медведя в опасной близости?" },
                 { name: "Оружие для дистанционного удара", description: "Что использовали, чтобы поразить зверя издалека, не испортив шкуру?" },
@@ -488,7 +488,7 @@
         nextBtn.onclick = () => { currentIndex++; renderQuestion(); };
     }
 
-    // НОВОЕ 2-Е ИСПЫТАНИЕ — сборка снаряжения
+    // 2-е ИСПЫТАНИЕ — сборка снаряжения
     function renderGearQuestion(q) {
         gearState = {
             slots: q.gearSlots.map((slot, idx) => ({ ...slot, filledWith: null, filled: false })),
@@ -509,6 +509,7 @@
         function renderGear() {
             const slotsContainer = document.getElementById('gearSlots');
             const itemsContainer = document.getElementById('itemsPool');
+            if (!slotsContainer || !itemsContainer) return;
             slotsContainer.innerHTML = '';
             itemsContainer.innerHTML = '';
             
@@ -638,7 +639,9 @@
         function renderMatch() {
             const leftDiv = document.getElementById('leftList');
             const rightDiv = document.getElementById('rightList');
-            leftDiv.innerHTML = ''; rightDiv.innerHTML = '';
+            if (!leftDiv || !rightDiv) return;
+            leftDiv.innerHTML = '';
+            rightDiv.innerHTML = '';
             
             matchState.leftItems.forEach((item, idx) => {
                 const card = document.createElement('div');
