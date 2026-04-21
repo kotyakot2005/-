@@ -127,29 +127,58 @@
             justify-content: center;
             border-radius: 50%;
         }
-        /* Стили для 2-го испытания — выбор предметов */
-        .items-select-grid {
+        /* Стили для true/false задания */
+        .truefalse-grid {
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
             margin: 20px 0;
         }
-        .select-item {
+        .tf-item {
             background: #e8dcc2;
-            padding: 15px 20px;
-            border-radius: 40px;
-            cursor: pointer;
-            text-align: center;
-            transition: 0.1s;
-            font-weight: 500;
-            flex: 1;
-            min-width: 160px;
+            border-radius: 28px;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
-        .select-item:hover { background: #dbbc87; transform: scale(1.02); }
-        .select-item.selected-correct { background: #a8c9a3; border: 2px solid #2c6e2c; cursor: default; }
-        .select-item.selected-wrong { background: #f3cfc0; border: 2px solid #b3432c; text-decoration: line-through; cursor: default; }
-        .select-item.disabled { opacity: 0.6; cursor: default; }
+        .tf-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #2c4a1f;
+            flex: 1;
+        }
+        .tf-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        .tf-true, .tf-false {
+            padding: 8px 24px;
+            border-radius: 40px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.1s;
+            font-size: 1rem;
+        }
+        .tf-true {
+            background: #4f8a3a;
+            color: white;
+        }
+        .tf-true:hover { background: #3a6b2a; }
+        .tf-false {
+            background: #a55a3a;
+            color: white;
+        }
+        .tf-false:hover { background: #8a452a; }
+        .tf-item.answered-true .tf-true { background: #2c5e1a; box-shadow: 0 0 0 2px gold; }
+        .tf-item.answered-false .tf-false { background: #8a2a1a; box-shadow: 0 0 0 2px gold; }
+        .tf-item.disabled .tf-true, .tf-item.disabled .tf-false {
+            opacity: 0.5;
+            cursor: default;
+        }
         /* Стили для "найди лишнее" */
         .items-grid {
             display: flex;
@@ -244,6 +273,7 @@
             .game-box { padding: 16px; }
             .story-header { margin: -16px -16px 20px -16px; padding: 16px; }
             .question-text { font-size: 1.2rem; }
+            .tf-item { flex-direction: column; text-align: center; }
             .match-area { flex-direction: column; }
         }
     </style>
@@ -265,7 +295,7 @@
 
 <script>
     // ============================================================
-    // 8 ВОПРОСОВ (2-е — простой выбор предметов)
+    // 8 ВОПРОСОВ (2-е — true/false про верования)
     // ============================================================
     const questions = [
         {
@@ -281,18 +311,17 @@
             explanation: "✨ По верованиям мари, в царстве мёртвых душе нужны ногти, чтобы карабкаться по горам, шиповник — отогнать стража-змея, а по холсту перейти в загробный мир."
         },
         {
-            type: 'multiselect',
-            text: "🏹 Какое снаряжение использовали марийские охотники? Выберите ТРИ правильных предмета из шести.",
-            items: [
-                { name: "Нож и рогатина", correct: true },
-                { name: "Лук со стрелами", correct: true },
-                { name: "Маскайол (обувь с шипами)", correct: true },
-                { name: "Огнестрельное ружьё", correct: false },
-                { name: "Капкан-давилка", correct: false },
-                { name: "Отравленные стрелы", correct: false }
+            type: 'truefalse',
+            text: "🌿 Проверьте свои знания о марийских верованиях и традициях. Для каждого утверждения выберите «Правда» или «Ложь»:",
+            statements: [
+                { text: "Марийцы до сих пор молятся в священных рощах (кюсото) своим жрецам-картам.", correct: true, explanation: "✅ Верно! Марийцы — единственный народ Европы, сохранивший языческую веру. В священных рощах до сих пор проводятся моления." },
+                { text: "Верховный бог марийцев называется Кугу-Юмо, и ему подчиняются более 140 божеств.", correct: true, explanation: "✅ Верно! Кугу-Юмо — верховный бог, а всего в пантеоне около 150 божеств: богиня земли Мланде-Ава, бог судьбы Пурышо и другие." },
+                { text: "Марийцы всегда хоронили умерших в летней одежде и отвозили на кладбище на телеге, даже зимой.", correct: false, explanation: "❌ Неверно! Марийцы хоронили в зимней одежде (шапка, рукавицы) и отвозили на санях — даже летом, чтобы душа не замёрзла в загробном мире." },
+                { text: "Секта «Кугу Сорта» (Большая свеча) — это православное течение внутри марийской церкви.", correct: false, explanation: "❌ Неверно! «Кугу Сорта» — это модернистское языческое течение, возникшее в 1870 году." },
+                { text: "По марийским поверьям, у каждого дерева, реки и ветра есть свой дух-хранитель.", correct: true, explanation: "✅ Верно! Природа для марийцев одушевлена: духи леса, воды, дома — важная часть традиционной веры." }
             ],
-            explanation: "📖 Марийцы славились как отличные охотники: не боялись медведя, били его ножом и рогатиной, стреляли из лука в голову, чтобы не испортить шкурку. А маскайол — «медвежьи лапы» — обувь с шипами для лазания на деревья за мёдом.",
-            feedback: "Верно! Вы отлично знаете снаряжение марийского охотника."
+            explanation: "📖 Марийская традиционная религия «чимари» признана одной из официальных в России. Она сочетает почитание Кугу-Юмо, священных рощ и духов природы.",
+            feedback: "Вы отлично разбираетесь в марийских верованиях!"
         },
         {
             type: 'choice',
@@ -372,7 +401,7 @@
     let legendPieces = [];
     
     // Состояния для интерактивных заданий
-    let multiselectState = { selected: [], correctCount: 0 };
+    let tfState = { answers: [] };
     let matchState = { selectedLeft: null, matchedPairs: [] };
     let oddSelected = false;
 
@@ -408,7 +437,7 @@
         const q = questions[currentIndex];
         answerLocked = false;
         if (q.type === 'choice') renderChoiceQuestion(q);
-        else if (q.type === 'multiselect') renderMultiselectQuestion(q);
+        else if (q.type === 'truefalse') renderTrueFalseQuestion(q);
         else if (q.type === 'oddone') renderOddOneQuestion(q);
         else if (q.type === 'matching') renderMatchingQuestion(q);
     }
@@ -451,85 +480,103 @@
         nextBtn.onclick = () => { currentIndex++; renderQuestion(); };
     }
 
-    // НОВОЕ 2-Е ЗАДАНИЕ — мультивыбор (кликабельные карточки)
-    function renderMultiselectQuestion(q) {
-        multiselectState = { 
-            selected: new Array(q.items.length).fill(false),
-            correctCount: q.items.filter(item => item.correct).length
-        };
+    // НОВОЕ 2-Е ЗАДАНИЕ — True/False про верования
+    function renderTrueFalseQuestion(q) {
+        tfState = { answers: new Array(q.statements.length).fill(null) };
         
         let html = `<div class="question-card"><div class="question-text">${q.text}</div>
-        <div class="items-select-grid" id="multiselectGrid"></div>
+        <div class="truefalse-grid" id="tfGrid"></div>
         <div id="feedbackArea" class="feedback" style="display: none;"></div>
-        <button id="checkMultiselectBtn" class="next-btn">✅ Проверить ответ</button>
+        <button id="checkTfBtn" class="next-btn">✅ Проверить все ответы</button>
         <button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Продолжить поиск легенды</button>
         </div>`;
         dynamicDiv.innerHTML = html;
         
-        const grid = document.getElementById('multiselectGrid');
+        const grid = document.getElementById('tfGrid');
         
-        q.items.forEach((item, idx) => {
+        q.statements.forEach((stmt, idx) => {
             const div = document.createElement('div');
-            div.className = 'select-item';
-            div.textContent = item.name;
-            div.onclick = () => {
-                if (answerLocked) return;
-                // Переключаем выделение
-                if (multiselectState.selected[idx]) {
-                    multiselectState.selected[idx] = false;
-                    div.classList.remove('selected-correct', 'selected-wrong');
-                } else {
-                    multiselectState.selected[idx] = true;
-                    // Визуально пока не показываем правильно/неправильно
-                    div.style.background = "#c9b06b";
-                }
-            };
+            div.className = 'tf-item';
+            div.innerHTML = `
+                <span class="tf-text">📌 ${stmt.text}</span>
+                <div class="tf-buttons">
+                    <button class="tf-true" data-idx="${idx}" data-value="true">✅ Правда</button>
+                    <button class="tf-false" data-idx="${idx}" data-value="false">❌ Ложь</button>
+                </div>
+            `;
             grid.appendChild(div);
         });
         
-        const checkBtn = document.getElementById('checkMultiselectBtn');
+        // Добавляем обработчики кнопок
+        document.querySelectorAll('.tf-true').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (answerLocked) return;
+                const idx = parseInt(btn.dataset.idx);
+                tfState.answers[idx] = true;
+                updateTfItemUI(idx, true);
+            });
+        });
+        
+        document.querySelectorAll('.tf-false').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (answerLocked) return;
+                const idx = parseInt(btn.dataset.idx);
+                tfState.answers[idx] = false;
+                updateTfItemUI(idx, false);
+            });
+        });
+        
+        function updateTfItemUI(idx, isTrue) {
+            const items = document.querySelectorAll('.tf-item');
+            const item = items[idx];
+            // Убираем старые классы
+            item.classList.remove('answered-true', 'answered-false');
+            if (isTrue) {
+                item.classList.add('answered-true');
+            } else {
+                item.classList.add('answered-false');
+            }
+        }
+        
+        const checkBtn = document.getElementById('checkTfBtn');
         checkBtn.onclick = () => {
             if (answerLocked) return;
             
-            // Подсчитываем выбранные предметы
-            const selectedIndices = [];
-            multiselectState.selected.forEach((sel, idx) => {
-                if (sel) selectedIndices.push(idx);
-            });
-            
-            // Проверяем, что выбрано ровно 3 предмета
-            if (selectedIndices.length !== 3) {
+            // Проверяем, что на все вопросы ответили
+            const allAnswered = tfState.answers.every(a => a !== null);
+            if (!allAnswered) {
                 const fb = document.getElementById('feedbackArea');
-                fb.innerHTML = '⚠️ Вы должны выбрать ровно ТРИ предмета! Вспомните, какое снаряжение использовали марийские охотники.';
+                fb.innerHTML = '⚠️ Вы ответили не на все утверждения! Дайте ответ на каждый пункт.';
                 fb.style.display = 'block';
                 return;
             }
             
-            // Проверяем правильность выбора
-            let allCorrect = true;
-            for (let i = 0; i < multiselectState.selected.length; i++) {
-                const isItemCorrect = q.items[i].correct;
-                if (multiselectState.selected[i] !== isItemCorrect) {
-                    allCorrect = false;
-                    break;
-                }
+            // Подсчитываем правильные ответы
+            let correctCount = 0;
+            const results = [];
+            for (let i = 0; i < q.statements.length; i++) {
+                const isCorrect = (tfState.answers[i] === q.statements[i].correct);
+                if (isCorrect) correctCount++;
+                results.push({ idx: i, correct: isCorrect, explanation: q.statements[i].explanation });
             }
             
             answerLocked = true;
             
-            // Визуально показываем правильные/неправильные ответы
-            const itemsDivs = document.querySelectorAll('.select-item');
-            q.items.forEach((item, idx) => {
-                if (item.correct) {
-                    itemsDivs[idx].classList.add('selected-correct');
-                    itemsDivs[idx].style.background = "#a8c9a3";
-                } else if (multiselectState.selected[idx] && !item.correct) {
-                    itemsDivs[idx].classList.add('selected-wrong');
-                    itemsDivs[idx].style.background = "#f3cfc0";
+            // Визуально показываем правильность
+            const items = document.querySelectorAll('.tf-item');
+            results.forEach(res => {
+                const item = items[res.idx];
+                item.classList.add('disabled');
+                if (!res.correct) {
+                    // Подсвечиваем неправильные ответы красноватым
+                    item.style.background = '#f3cfc0';
+                } else {
+                    item.style.background = '#cfe2cf';
                 }
-                itemsDivs[idx].classList.add('disabled');
-                itemsDivs[idx].onclick = null;
             });
+            
+            // Все ответы правильные? (нужно 5 из 5)
+            const allCorrect = (correctCount === q.statements.length);
             
             if (allCorrect) { 
                 score += 10; 
@@ -541,12 +588,17 @@
             
             const fb = document.getElementById('feedbackArea');
             let legendNote = (allCorrect && legendPieces.length) ? `<br>📜 Легенда: ${legendPieces[legendPieces.length-1]}` : '';
-            const correctItems = q.items.filter(i => i.correct).map(i => i.name).join(', ');
+            
+            // Формируем детальный ответ
+            let details = '';
+            results.forEach(res => {
+                details += `<br>${res.correct ? '✅' : '❌'} ${q.statements[res.idx].text}<br><span style="margin-left:20px;font-size:0.85rem;">${q.statements[res.idx].explanation}</span>`;
+            });
             
             if (allCorrect) {
-                fb.innerHTML = `✅ ${q.feedback}<br>🌟 +10 знаний.${legendNote}<br>${q.explanation}`;
+                fb.innerHTML = `✅ ${q.feedback}<br>🌟 +10 знаний.${legendNote}<br><br>${details}`;
             } else {
-                fb.innerHTML = `❌ Неправильно. Правильные предметы: ${correctItems}.<br>${q.explanation}`;
+                fb.innerHTML = `❌ Вы ответили правильно на ${correctCount} из ${q.statements.length} утверждений.<br>Правильные ответы:${details}<br><br>${q.explanation}`;
             }
             fb.style.display = 'block';
             checkBtn.style.display = 'none';
