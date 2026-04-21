@@ -720,4 +720,19 @@
         if (score >= 70) {
             endingTitle = '🏅 «Хранитель предания»';
             endingStory = `Ваши знания — ${score} из ${maxScore}. Дух Чоткар-патыра является вам: «Ты собрал легенду, этнограф. Отныне ты — хранитель марийской старины. Имя тебе "Память леса"». Старейшины кланяются.`;
-       
+        } else if (score >= 40) {
+            endingTitle = '🌿 «Ученик карта»';
+            endingStory = `Ваш результат — ${score} очков. Карт Михаил говорит: «Ты многое узнал. Оставайся в деревне — я научу тебя играть на шувыре и различать голоса духов».`;
+        } else {
+            endingTitle = '🍃 «Путник с вопросом»';
+            endingStory = `У вас ${score} баллов. Старушка Анисья дарит вам оберег: «Ты не разбудил богатыря, но сердце твоё открыто. Приезжай ещё — знание не приходит в один день».`;
+        }
+        dynamicDiv.innerHTML = `<div class="ending"><h2>🔮 Разгадка руны</h2><p style="font-size:1.4rem;font-weight:bold;">${endingTitle}</p><p>${endingStory}</p><p><strong>Итог:</strong> ${score} / ${maxScore} знаний.</p>${fullLegend}<button id="fullRestartBtn" class="restart-btn">🌲 Начать новое путешествие</button></div>`;
+        document.getElementById('fullRestartBtn')?.addEventListener('click', () => { currentIndex = 0; score = 0; gameFinished = false; legendPieces = []; updateStatsUI(); renderQuestion(); });
+        currentQNumSpan.innerText = TOTAL_QS;
+    }
+    renderQuestion();
+    updateStatsUI();
+</script>
+</body>
+</html>
