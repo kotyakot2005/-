@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Марийский этнограф — смешанная викторина</title>
+    <title>Тайна марийской руны — этнографическое приключение</title>
     <style>
         * {
             box-sizing: border-box;
         }
         body {
             font-family: 'Segoe UI', 'Roboto', 'Georgia', serif;
-            background: linear-gradient(145deg, #2c2b26 0%, #4a3b28 100%);
+            background: linear-gradient(145deg, #1a3a15 0%, #2e2a1a 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -19,194 +19,214 @@
             margin: 0;
         }
         .game-box {
-            max-width: 850px;
+            max-width: 880px;
             width: 100%;
-            background: #fef7e0;
-            border-radius: 56px;
-            box-shadow: 0 25px 45px rgba(0,0,0,0.5);
+            background: #fef5e6;
+            border-radius: 48px;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.6);
             overflow: hidden;
-            padding: 25px 30px 35px;
-            border: 1px solid #e9cf9e;
+            padding: 20px 28px 32px;
+            border: 1px solid #e2bc7c;
+        }
+        .story-header {
+            background: #3d2a1a;
+            margin: -20px -28px 20px -28px;
+            padding: 22px 28px 18px;
+            color: #ffefcf;
+            border-bottom: 4px solid #dba551;
         }
         h1 {
-            font-size: 1.8rem;
-            text-align: center;
-            margin: 0 0 5px 0;
-            color: #3a5e2b;
+            font-size: 1.7rem;
+            margin: 0 0 8px 0;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 12px;
             flex-wrap: wrap;
         }
-        h1 small {
-            font-size: 0.8rem;
-            background: #dac282;
-            padding: 4px 14px;
-            border-radius: 50px;
-            color: #2c2b1f;
-            font-weight: normal;
-        }
-        .subhead {
-            text-align: center;
-            color: #7a5a3a;
-            border-bottom: 1px dashed #e2ca9c;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
+        .story-text {
             font-style: italic;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+        .journal-badge {
+            background: #dba551;
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            color: #2d1f0f;
+            margin-top: 10px;
+            font-weight: bold;
         }
         .stats-bar {
-            background: #e7dbbc;
-            border-radius: 60px;
+            background: #e8dcc2;
+            border-radius: 40px;
             padding: 8px 18px;
             display: flex;
             justify-content: space-between;
             font-weight: bold;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
-            gap: 10px;
         }
         .score, .question-counter {
-            background: #4f6b32;
-            color: #fef2da;
-            padding: 5px 16px;
-            border-radius: 40px;
+            background: #5a3e28;
+            color: #fef0db;
+            padding: 5px 18px;
+            border-radius: 30px;
         }
         .question-card {
-            background: #fffaf0;
-            border-radius: 48px;
+            background: #fffaf2;
+            border-radius: 40px;
             padding: 20px 25px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
         .question-text {
-            font-size: 1.45rem;
+            font-size: 1.4rem;
             font-weight: 600;
-            color: #2b4223;
+            color: #2b5320;
             line-height: 1.3;
-            margin-bottom: 25px;
-            border-left: 5px solid #c9a86b;
+            margin-bottom: 24px;
+            border-left: 5px solid #c6913a;
             padding-left: 20px;
         }
         .answers {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
         }
         .answer-btn {
             background: #ffffff;
-            border: 2px solid #decb9e;
-            border-radius: 100px;
+            border: 2px solid #dbbc87;
+            border-radius: 60px;
             padding: 12px 20px;
             font-size: 1rem;
             text-align: left;
             cursor: pointer;
             transition: 0.1s;
             font-weight: 500;
-            color: #2f3b25;
+            color: #2f3b1f;
             display: flex;
             align-items: center;
             gap: 12px;
         }
         .answer-btn:hover:not(:disabled) {
-            background: #f2e5cf;
-            border-color: #b58b40;
+            background: #efe1c7;
+            border-color: #b5762c;
             transform: scale(0.99);
         }
         .answer-letter {
             font-weight: bold;
-            background: #e6d5b5;
-            width: 32px;
-            height: 32px;
+            background: #ddceaa;
+            width: 34px;
+            height: 34px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            border-radius: 60px;
+            border-radius: 50%;
         }
-        .true-false-btns {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin: 20px 0;
-        }
-        .tf-btn {
-            background: #ffffff;
-            border: 2px solid #decb9e;
-            border-radius: 60px;
-            padding: 15px 30px;
-            font-size: 1.3rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.1s;
-        }
-        .tf-btn:hover {
-            background: #f2e5cf;
-            transform: scale(0.98);
-        }
-        .sort-container {
+        /* Стили для drag-and-drop задания */
+        .drag-area {
             display: flex;
             gap: 20px;
             flex-wrap: wrap;
             justify-content: center;
             margin: 20px 0;
         }
-        .sort-category {
-            background: #e7dbbc;
-            border-radius: 24px;
-            padding: 15px;
+        .drag-items {
             flex: 1;
             min-width: 180px;
+            background: #e8dcc2;
+            border-radius: 28px;
+            padding: 15px;
         }
-        .sort-category h4 {
-            text-align: center;
-            margin: 0 0 12px 0;
-            color: #3a5e2b;
+        .drop-zone {
+            flex: 1;
+            min-width: 180px;
+            background: #e8dcc2;
+            border-radius: 28px;
+            padding: 15px;
         }
-        .sort-dropzone {
-            min-height: 150px;
-            background: #fffaf0;
-            border: 2px dashed #c9a86b;
-            border-radius: 20px;
+        .draggable {
+            background: #dbbc87;
+            margin: 8px 0;
             padding: 10px;
+            border-radius: 20px;
+            cursor: grab;
+            text-align: center;
+            font-weight: bold;
         }
-        .sort-card {
-            background: #c9a86b;
-            color: white;
-            padding: 8px 12px;
-            margin: 6px;
+        .draggable:active { cursor: grabbing; }
+        .drop-slot {
+            background: #fef5e6;
+            border: 2px dashed #a5763a;
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: 20px;
+            min-height: 50px;
+            text-align: center;
+        }
+        .drop-slot.filled { background: #cfe2cf; border: 2px solid #3f8227; }
+        /* Стили для "найди лишнее" */
+        .items-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .food-item {
+            background: #e8dcc2;
+            padding: 15px 20px;
             border-radius: 40px;
-            display: inline-block;
             cursor: pointer;
-            font-size: 0.9rem;
+            text-align: center;
+            transition: 0.1s;
+            font-weight: 500;
         }
-        .sort-card.unplaced {
-            background: #7b5f3a;
+        .food-item:hover { background: #dbbc87; transform: scale(1.02); }
+        .food-item.selected-wrong { background: #f3cfc0; border: 2px solid #b3432c; text-decoration: line-through; }
+        /* Стили для сопоставления */
+        .match-area {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .match-left, .match-right {
+            flex: 1;
+            min-width: 200px;
+        }
+        .match-card {
+            background: #e8dcc2;
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 28px;
+            text-align: center;
             cursor: pointer;
+            transition: 0.1s;
         }
-        .input-field {
-            width: 100%;
-            padding: 14px 20px;
-            font-size: 1.1rem;
-            border: 2px solid #decb9e;
-            border-radius: 60px;
-            margin: 15px 0;
-            font-family: inherit;
-        }
+        .match-card.selected { background: #c9b06b; border: 2px solid #2c5e1a; }
+        .match-card.matched { background: #a8c9a3; opacity: 0.6; cursor: default; text-decoration: line-through; }
+        .match-pair-info { text-align: center; margin-top: 15px; font-style: italic; color: #2c5e1a; }
         .feedback {
             margin-top: 20px;
             padding: 14px 20px;
-            border-radius: 40px;
-            background: #efe2cb;
-            color: #2c4722;
-            font-weight: 500;
-            border-left: 8px solid #c9a86b;
+            border-radius: 32px;
+            background: #efe0c6;
+            color: #2c4a1f;
+            border-left: 6px solid #c6913a;
+            font-size: 0.95rem;
         }
         .next-btn, .restart-btn {
-            background: #7b5f3a;
+            background: #7b5a36;
             border: none;
             color: white;
-            padding: 12px 24px;
-            font-size: 1.1rem;
+            padding: 12px 20px;
+            font-size: 1rem;
             border-radius: 40px;
             font-weight: bold;
             cursor: pointer;
@@ -215,132 +235,148 @@
             transition: 0.1s;
         }
         .next-btn:hover, .restart-btn:hover {
-            background: #5c4528;
-            transform: scale(0.98);
+            background: #553b1f;
         }
         .ending {
             text-align: center;
-            background: #e3cfaa;
-            border-radius: 48px;
-            padding: 20px;
+            background: #f2e5cf;
+            border-radius: 40px;
+            padding: 24px 20px;
             margin-top: 10px;
+        }
+        .legend-box {
+            background: #e2d0ae;
+            border-radius: 28px;
+            padding: 16px;
+            margin: 16px 0;
+            text-align: left;
+            font-style: italic;
+            border-left: 4px solid #a5763a;
         }
         footer {
             text-align: center;
             font-size: 0.7rem;
-            color: #ad946b;
-            margin-top: 25px;
+            color: #b69154;
+            margin-top: 22px;
         }
-        @media (max-width: 600px) {
-            .game-box { padding: 18px; }
+        @media (max-width: 550px) {
+            .game-box { padding: 16px; }
+            .story-header { margin: -16px -16px 20px -16px; padding: 16px; }
             .question-text { font-size: 1.2rem; }
-            .sort-container { flex-direction: column; }
+            .drag-area { flex-direction: column; }
+            .match-area { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 <div class="game-box" id="gameRoot">
-    <h1>🧑‍🏛️ Марийский этнограф <small>смешанные форматы</small></h1>
-    <div class="subhead">📖 8 вопросов: викторина, «верно/не верно», сортировка, ввод слова</div>
+    <div class="story-header">
+        <h1>🗝️ Тайна марийской руны <span style="font-size:1rem;">дневник этнографа</span></h1>
+        <div class="story-text">📍 Марий Эл, наши дни. Вы — молодой исследователь. В заброшенной деревне Кожлаял вы нашли древний деревянный амулет с письменами. Местный старейшина, карт Михаил, сказал: «Это руна Чоткар-патыря — героя, что спал 100 лет. Кто соберёт все части легенды, тот услышит его голос». Ваше знание марийской культуры — единственный ключ.</div>
+        <div class="journal-badge">📓 ДНЕВНИК ЭТНОГРАФА: легенда собирается по крупицам</div>
+    </div>
     <div class="stats-bar">
-        <span class="score">🏆 Счёт: <span id="scoreValue">0</span></span>
-        <span class="question-counter">❓ Вопрос <span id="currentQNum">1</span> / <span id="totalQ">8</span></span>
+        <span class="score">🏆 Знаний: <span id="scoreValue">0</span></span>
+        <span class="question-counter">📖 Испытание <span id="currentQNum">1</span> / <span id="totalQ">8</span></span>
     </div>
     <div id="dynamicContent"></div>
-    <footer>📚 Основано на документе «Марийский народ.doc»</footer>
+    <footer>🌲 Сосновый лес хранит ответы. Каждый верный шаг приближает к голосу предков.</footer>
 </div>
 
 <script>
-    // ВОПРОСЫ С РАЗНЫМИ ФОРМАТАМИ
-    // type: 'choice' - обычная викторина
-    // type: 'truefalse' - верно/не верно
-    // type: 'sort' - сортировка (две категории)
-    // type: 'fillblank' - ввод слова
-
+    // ============================================================
+    // 8 ВОПРОСОВ (3 из них — в интерактивном формате)
+    // Типы: 'choice' (обычный), 'dragdrop', 'oddone', 'matching'
+    // ============================================================
     const questions = [
-        { // 0 - обычная викторина
+        {
             type: 'choice',
-            text: "🗿 Вы нашли древнее марийское захоронение. В могиле лежат ногти, шиповник и холст. Что это значит?",
+            text: "🗿 В древних марийских захоронениях археологи находят ногти, ветки шиповника и кусок холста. Для чего, по поверьям, нужны эти предметы?",
             options: [
-                "А) Бытовые предметы, случайно попавшие в могилу",
-                "Б) Ритуал: ногти для скал, шиповник от змеи, холст — мост в загробный мир",
-                "В) Охотничьи талисманы",
-                "Г) Средства для лечения"
+                "А) Чтобы защитить тело от зверей",
+                "Б) Ногти — чтобы цепляться за скалы в мире мёртвых, шиповник — отогнать змею, холст — мост для души",
+                "В) Это символы плодородия",
+                "Г) Чтобы душа не вернулась обратно"
             ],
             correct: 1,
-            explanation: "✅ По марийским поверьям, ногти нужны, чтобы цепляться за скалы в царстве мёртвых, шиповник отгоняет змею и собаку у входа, холст — мост для души."
+            explanation: "✨ По верованиям мари, в царстве мёртвых душе нужны ногти, чтобы карабкаться по горам, шиповник — отогнать стража-змея, а по холсту перейти в загробный мир."
         },
-        { // 1 - обычная викторина
+        {
+            type: 'dragdrop',
+            text: "🏹 Луговые марийцы славились как искусные охотники. Соберите правильную ловушку для глухаря: перетащите элементы конструкции в нужном порядке.",
+            dragItems: ["Плетёная корзина", "Захлопывающаяся крышка", "Приманка (ягоды/наживка)"],
+            dropZones: ["Основание", "Механизм захлопывания", "Привлечение птицы"],
+            correctOrder: [0, 1, 2],
+            explanation: "📖 Оригинальная ловушка — плетёная корзина с захлопывающейся крышкой и приманкой внутри. Глухарь заходил за приманкой — крышка захлопывалась.",
+            feedback: "Верно! Вы собрали ловушку марийского охотника."
+        },
+        {
             type: 'choice',
-            text: "🏹 Какой оригинальный способ охоты на глухаря использовали луговые марийцы?",
+            text: "🎵 На марийском празднике вы слышите завораживающую музыку. Один инструмент напоминает волынку, а танец называется «верёвочка». Как их называют сами марийцы?",
             options: [
-                "А) Ловили силками на ветках",
-                "Б) Плетёная корзина с захлопывающейся крышкой",
-                "В) Стреляли из лука ночью",
-                "Г) Травили собаками"
+                "А) «Тарпан» и «мурда»",
+                "Б) «Кандыра» и «шувыр»",
+                "В) «Шымакш» и «карт»",
+                "Г) «Ошмари» и «салам»"
             ],
             correct: 1,
-            explanation: "📖 Марийцы применяли ловушку в виде плетёной корзины с захлопывающейся крышкой — для глухарей, тетеревов и куниц."
+            explanation: "🎶 Танец-«верёвочка» — кандыра (его ритм отбивают ногами, будто плетут узор), а шувыр — древняя марийская волынка из бычьего пузыря и петушиных перьев."
         },
-        { // 2 - ВЕРНО / НЕ ВЕРНО (про одежду)
-            type: 'truefalse',
-            text: "🎭 Традиционный цвет марийской одежды — красный, а белый используется только в свадебных костюмах.",
-            correct: false,  // не верно
-            explanation: "❌ Не верно. Основной цвет марийского костюма — белый (домотканый холст). Красный — акцентный цвет-оберег в вышивке, но не основной."
-        },
-        { // 3 - обычная викторина (танец и музыка)
+        {
             type: 'choice',
-            text: "🎵 Как называются традиционный марийский танец и инструмент, похожий на волынку?",
+            text: "📜 В древнерусских летописях упоминается исчезнувший народ меря. Кем они приходятся современным марийцам?",
             options: [
-                "А) Тарпан и мурда",
-                "Б) Кандыра («Верёвочка») и шувыр",
-                "В) Шымакш и карт",
-                "Г) Ошмари и салам"
+                "А) Прямыми предками",
+                "Б) Отдельным этносом, но близкой роднёй, жившей западнее",
+                "В) Врагами, которых марийцы изгнали",
+                "Г) Скифским племенем, пришедшим с юга"
             ],
             correct: 1,
-            explanation: "🎵 Танец — кандыра («Верёвочка»), инструмент — шувыр (разновидность волынки)."
+            explanation: "🧬 Историки спорят до сих пор: возможно, меря — отдельный финно-угорский народ, близкий марийцам по языку и культуре, но живший на территории современных Ярославской и Ивановской областей."
         },
-        { // 4 - СОРТИРОВКА (земледелие vs охота/рыболовство)
-            type: 'sort',
-            text: "🏺 Распределите орудия и занятия по категориям: «Земледелие» и «Охота / рыболовство».",
-            categories: ["Земледелие", "Охота / рыболовство"],
-            items: [
-                { name: "Соха (шага)", category: "Земледелие" },
-                { name: "Плетёная корзина-ловушка", category: "Охота / рыболовство" },
-                { name: "Сабан (татарский плуг)", category: "Земледелие" },
-                { name: "Морда (мурда) для рыбы", category: "Охота / рыболовство" }
-            ],
-            explanation: "✅ Соха и сабан — орудия земледелия. Корзина-ловушка и морда — для охоты и рыболовства."
+        {
+            type: 'oddone',
+            text: "🍲 Вас пригласили на марийское застолье. Найдите блюдо, которого НЕТ в традиционной марийской кухне — кликните на лишнее.",
+            items: ["Вареники с мясом", "Пироги с конопляным семенем", "Борщ с пампушками", "Вяленая колбаса из конины"],
+            correctIndex: 2,
+            explanation: "🥣 Борщ и пампушки — заимствованные блюда. Аутентичная кухня марийцев включала мясо белки, ужа, филина, пельмени, колбасу из конины и лепёшки из конопляного семени."
         },
-        { // 5 - обычная викторина (субэтносы)
+        {
             type: 'choice',
-            text: "🏞️ Кто такие «кырык мары» и где они живут?",
+            text: "🏞️ Вы встречаете группу, которая называет себя «кырык мары». Кто они и где живут?",
             options: [
-                "А) Луговые марийцы, междуречье Волги и Вятки",
-                "Б) Восточные марийцы, в Башкирии",
-                "В) Горные марийцы, правый берег Волги",
-                "Г) Северо-западные марийцы, Кировская область"
+                "А) Луговые марийцы (Олык марий) — в междуречье Волги и Вятки",
+                "Б) Восточные марийцы (Эрвел мари) — в Башкирии",
+                "В) Горные марийцы — на правом берегу Волги",
+                "Г) Северо-западные марийцы — в Кировской области"
             ],
             correct: 2,
-            explanation: "🏔️ Кырык мары — горные марийцы. Живут на правом берегу Волги (и частично левом) на западе Марий Эл."
+            explanation: "🏔️ Кырык мары — горные марийцы. Их название происходит от «кырык» (гора). Они живут на правом, возвышенном берегу Волги и дольше контактировали с чувашами и русскими."
         },
-        { // 6 - ВВОД СЛОВА (религия)
-            type: 'fillblank',
-            text: "🕯️ Верховного бога марийцев-язычников, сохранивших традиционную веру, зовут ________. (Введите имя)",
-            correctAnswers: ["кугю-юмо", "кугу юмо", "кугуюмо", "kugu-yumo"],
-            explanation: "✅ Верховный бог — Кугу-Юмо. Религия называется «чимари», моления проводят жрецы-карты в священных рощах."
-        },
-        { // 7 - обычная викторина (бортничество)
-            type: 'choice',
-            text: "🐝 Что такое «маскайол» у марийских пчеловодов?",
-            options: [
-                "А) Ритуальный танец",
-                "Б) Обувь с шипами для лазания на бортные деревья",
-                "В) Женский головной убор",
-                "Г) Священная роща"
+        {
+            type: 'matching',
+            text: "👗 Сопоставьте марийский головной убор с его описанием. Кликните на элемент из левого столбца, затем на описание из правого.",
+            leftItems: ["Шымакш", "Шурка", "Сорока", "Тарпан"],
+            rightItems: [
+                "Конусовидный колпак на берестяном каркасе с затылочной лопастью",
+                "Высокий убор на берестяной основе, напоминающий мордовский",
+                "Убор, заимствованный у русских",
+                "Головное полотенце с очельем"
             ],
-            correct: 1,
-            explanation: "🍯 Маскайол («медвежьи лапы») — гнутая деревянная обувь с железными шипами для подъёма на деревья ради мёда диких пчёл."
+            correctPairs: [[0,0], [1,1], [2,2], [3,3]],
+            explanation: "🧵 Шымакш — самый распространённый убор замужних марийок на берестяном каркасе. Шурка — более древний вариант. Сорока — русское влияние. Тарпан — полотенцевидный убор."
+        },
+        {
+            type: 'choice',
+            text: "🗣️ Марийский язык — живое наследие финно-угорской семьи. Какая особенность роднит его с тюркскими языками?",
+            options: [
+                "А) В нём полностью отсутствуют гласные звуки",
+                "Б) Он использует иероглифическое письмо",
+                "В) В нём множество тюркских заимствований, например приветствие «салам» и слово «Эл» (земля)",
+                "Г) Он является точной копией татарского языка"
+            ],
+            correct: 2,
+            explanation: "📖 Марийский язык впитал много тюркских слов через века соседства с татарами и чувашами. «Салам» (здравствуйте) пришло через тюркские языки из арабского, а «Эл» (земля, страна) родственно татарскому «ул»."
         }
     ];
 
@@ -349,7 +385,11 @@
     let score = 0;
     let gameFinished = false;
     let answerLocked = false;
-    let currentSortState = {}; // для сортировки
+    let legendPieces = [];
+    // Для хранения состояния интерактивных заданий
+    let dragState = { remainingDrags: [], remainingZones: [], assignments: [] };
+    let matchState = { selectedLeft: null, matchedPairs: [] };
+    let oddSelected = false;
 
     const dynamicDiv = document.getElementById('dynamicContent');
     const scoreSpan = document.getElementById('scoreValue');
@@ -359,275 +399,229 @@
 
     function updateStatsUI() {
         scoreSpan.innerText = score;
-        if (!gameFinished) {
-            currentQNumSpan.innerText = currentIndex + 1;
-        }
+        if (!gameFinished) currentQNumSpan.innerText = currentIndex + 1;
     }
 
-    function normalizeAnswer(str) {
-        return str.toLowerCase().replace(/[-\s]/g, '').replace(/ё/g, 'е');
-    }
+    const legendFragments = [
+        "🌲 Давно жил могучий воин Чоткар-патыр.",
+        "⚔️ Он защищал священные рощи марийцев.",
+        "👗 Его жена славилась искусством вышивки.",
+        "💤 Устав, он уснул в пещере на горе Карман-Курык.",
+        "🗣️ Тот, кто знает язык предков, говорит с духами.",
+        "🗝️ Руна — печать Чоткар-патыря.",
+        "✨ Когда 100 знатоков соберутся, он проснётся.",
+        "🕊️ Каждый помнящий традиции — звено цепи времён."
+    ];
 
-    function finishQuestion(points, explanation) {
-        if (answerLocked) return;
-        answerLocked = true;
-        score += points;
-        updateStatsUI();
-
-        const feedbackDiv = document.getElementById('feedbackArea');
-        if (feedbackDiv) {
-            feedbackDiv.innerHTML = `<strong>${points > 0 ? '✅ +' + points + ' очков' : '❌ 0 очков'}</strong><br>${explanation}`;
-            feedbackDiv.style.display = 'block';
-        }
-
-        const nextBtn = document.getElementById('nextQuestBtn');
-        if (nextBtn) {
-            nextBtn.style.display = 'block';
-            nextBtn.addEventListener('click', () => {
-                currentIndex++;
-                if (currentIndex < TOTAL_QS) {
-                    renderQuestion();
-                    updateStatsUI();
-                } else {
-                    finishGame();
-                }
-            }, { once: true });
-        }
-    }
-
-    // ОБЫЧНАЯ ВИКТОРИНА
-    function renderChoice(q) {
-        let html = `
-            <div class="question-card">
-                <div class="question-text">${q.text}</div>
-                <div class="answers">
-        `;
-        q.options.forEach((opt, idx) => {
-            const letter = String.fromCharCode(65+idx);
-            html += `
-                <div class="answer-btn" data-opt-index="${idx}">
-                    <span class="answer-letter">${letter}</span>
-                    <span>${opt}</span>
-                </div>
-            `;
-        });
-        html += `
-                </div>
-                <div id="feedbackArea" class="feedback" style="display: none;"></div>
-                <button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Следующий вопрос</button>
-            </div>
-        `;
-        dynamicDiv.innerHTML = html;
-        
-        const answerBtns = document.querySelectorAll('.answer-btn');
-        answerBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                if (answerLocked) return;
-                const selectedIdx = parseInt(btn.getAttribute('data-opt-index'));
-                const isCorrect = (selectedIdx === q.correct);
-                finishQuestion(isCorrect ? 10 : 0, q.explanation);
-                // подсветка
-                const allBtns = document.querySelectorAll('.answer-btn');
-                allBtns.forEach((b, idx) => {
-                    b.style.pointerEvents = 'none';
-                    if (idx === q.correct) b.style.backgroundColor = '#cce6c6';
-                    if (idx === selectedIdx && idx !== q.correct) b.style.backgroundColor = '#f3cfc3';
-                });
-            });
-        });
-    }
-
-    // ВЕРНО / НЕ ВЕРНО
-    function renderTrueFalse(q) {
-        let html = `
-            <div class="question-card">
-                <div class="question-text">${q.text}</div>
-                <div class="true-false-btns">
-                    <button id="trueBtn" class="tf-btn">✅ Верно</button>
-                    <button id="falseBtn" class="tf-btn">❌ Не верно</button>
-                </div>
-                <div id="feedbackArea" class="feedback" style="display: none;"></div>
-                <button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Следующий вопрос</button>
-            </div>
-        `;
-        dynamicDiv.innerHTML = html;
-        
-        document.getElementById('trueBtn').addEventListener('click', () => {
-            if (answerLocked) return;
-            const isCorrect = (q.correct === true);
-            finishQuestion(isCorrect ? 10 : 0, q.explanation);
-        });
-        document.getElementById('falseBtn').addEventListener('click', () => {
-            if (answerLocked) return;
-            const isCorrect = (q.correct === false);
-            finishQuestion(isCorrect ? 10 : 0, q.explanation);
-        });
-    }
-
-    // СОРТИРОВКА
-    function renderSort(q) {
-        let unplaced = [...q.items];
-        let placed = { "Земледелие": [], "Охота / рыболовство": [] };
-        
-        function renderSortUI() {
-            let html = `
-                <div class="question-card">
-                    <div class="question-text">${q.text}</div>
-                    <div class="sort-container">
-                        <div class="sort-category">
-                            <h4>🌾 Земледелие</h4>
-                            <div class="sort-dropzone" id="dropzone0">
-                                ${placed["Земледелие"].map(item => `<div class="sort-card" data-item="${item.name}" data-cat="Земледелие">${item.name}</div>`).join('')}
-                            </div>
-                        </div>
-                        <div class="sort-category">
-                            <h4>🏹 Охота / рыболовство</h4>
-                            <div class="sort-dropzone" id="dropzone1">
-                                ${placed["Охота / рыболовство"].map(item => `<div class="sort-card" data-item="${item.name}" data-cat="Охота / рыболовство">${item.name}</div>`).join('')}
-                            </div>
-                        </div>
-                    </div>
-                    <div style="margin-top: 15px; background: #e7dbbc; border-radius: 40px; padding: 10px;">
-                        <strong>📦 Не распределено:</strong>
-                        <div id="unplacedArea" style="min-height: 50px;">
-                            ${unplaced.map(item => `<div class="sort-card unplaced" data-item="${item.name}">${item.name}</div>`).join('')}
-                        </div>
-                    </div>
-                    <button id="checkSortBtn" class="next-btn" style="margin-top: 15px;">✅ Проверить сортировку</button>
-                    <div id="feedbackArea" class="feedback" style="display: none;"></div>
-                    <button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Следующий вопрос</button>
-                </div>
-            `;
-            dynamicDiv.innerHTML = html;
-            
-            // обработчики перетаскивания (упрощённо — клик)
-            document.querySelectorAll('.sort-card.unplaced').forEach(card => {
-                card.addEventListener('click', (e) => {
-                    const itemName = card.getAttribute('data-item');
-                    const itemObj = unplaced.find(i => i.name === itemName);
-                    if (itemObj) {
-                        unplaced = unplaced.filter(i => i.name !== itemName);
-                        // по умолчанию предлагаем в первую категорию, но лучше выберем по исходной категории
-                        const targetCat = itemObj.category;
-                        placed[targetCat].push(itemObj);
-                        renderSortUI();
-                    }
-                });
-            });
-            document.querySelectorAll('.sort-card:not(.unplaced)').forEach(card => {
-                card.addEventListener('click', (e) => {
-                    const itemName = card.getAttribute('data-item');
-                    const cat = card.getAttribute('data-cat');
-                    const itemObj = placed[cat].find(i => i.name === itemName);
-                    if (itemObj) {
-                        placed[cat] = placed[cat].filter(i => i.name !== itemName);
-                        unplaced.push(itemObj);
-                        renderSortUI();
-                    }
-                });
-            });
-            
-            document.getElementById('checkSortBtn').addEventListener('click', () => {
-                if (answerLocked) return;
-                let correctCount = 0;
-                for (let item of q.items) {
-                    const foundInCorrect = placed[item.category]?.some(i => i.name === item.name);
-                    if (foundInCorrect) correctCount++;
-                }
-                const points = (correctCount === q.items.length) ? 10 : 0;
-                finishQuestion(points, q.explanation + (points === 0 ? " Нужно разложить всё правильно." : ""));
-            });
-        }
-        renderSortUI();
-    }
-
-    // ВВОД СЛОВА
-    function renderFillBlank(q) {
-        let html = `
-            <div class="question-card">
-                <div class="question-text">${q.text}</div>
-                <input type="text" id="fillInput" class="input-field" placeholder="Введите ответ...">
-                <button id="checkFillBtn" class="next-btn" style="margin-top: 0;">✅ Ответить</button>
-                <div id="feedbackArea" class="feedback" style="display: none;"></div>
-                <button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Следующий вопрос</button>
-            </div>
-        `;
-        dynamicDiv.innerHTML = html;
-        
-        document.getElementById('checkFillBtn').addEventListener('click', () => {
-            if (answerLocked) return;
-            const userAnswer = document.getElementById('fillInput').value;
-            const normalized = normalizeAnswer(userAnswer);
-            const isCorrect = q.correctAnswers.some(ca => normalizeAnswer(ca) === normalized);
-            finishQuestion(isCorrect ? 10 : 0, q.explanation);
-        });
-        document.getElementById('fillInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                document.getElementById('checkFillBtn').click();
-            }
-        });
+    function addLegendPiece(correct) {
+        if (correct && legendPieces.length < legendFragments.length)
+            legendPieces.push(legendFragments[legendPieces.length]);
     }
 
     function renderQuestion() {
-        if (currentIndex >= TOTAL_QS) {
-            finishGame();
-            return;
-        }
-        answerLocked = false;
+        if (currentIndex >= TOTAL_QS) { finishGame(); return; }
         const q = questions[currentIndex];
-        if (q.type === 'choice') renderChoice(q);
-        else if (q.type === 'truefalse') renderTrueFalse(q);
-        else if (q.type === 'sort') renderSort(q);
-        else if (q.type === 'fillblank') renderFillBlank(q);
+        answerLocked = false;
+        if (q.type === 'choice') renderChoiceQuestion(q);
+        else if (q.type === 'dragdrop') renderDragDropQuestion(q);
+        else if (q.type === 'oddone') renderOddOneQuestion(q);
+        else if (q.type === 'matching') renderMatchingQuestion(q);
+    }
+
+    function renderChoiceQuestion(q) {
+        let html = `<div class="question-card"><div class="question-text">${q.text}</div><div class="answers">`;
+        q.options.forEach((opt, idx) => {
+            const letter = String.fromCharCode(65+idx);
+            html += `<div class="answer-btn" data-opt-index="${idx}"><span class="answer-letter">${letter}</span><span>${opt}</span></div>`;
+        });
+        html += `</div><div id="feedbackArea" class="feedback" style="display: none;"></div><button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Продолжить</button></div>`;
+        dynamicDiv.innerHTML = html;
+        document.querySelectorAll('.answer-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (answerLocked) return;
+                const selected = parseInt(btn.dataset.optIndex);
+                handleChoiceAnswer(q, selected);
+            });
+        });
+    }
+
+    function handleChoiceAnswer(q, selected) {
+        answerLocked = true;
+        const isCorrect = (selected === q.correct);
+        if (isCorrect) { score += 10; addLegendPiece(true); updateStatsUI(); }
+        else addLegendPiece(false);
+        const feedbackDiv = document.getElementById('feedbackArea');
+        const correctLetter = String.fromCharCode(65 + q.correct);
+        const correctText = q.options[q.correct];
+        let legendNote = (isCorrect && legendPieces.length) ? `<br>📜 Легенда: ${legendPieces[legendPieces.length-1]}` : '';
+        feedbackDiv.innerHTML = (isCorrect ? `✅ Верно! ${q.explanation}<br>🌟 +10 знаний.${legendNote}` : `❌ Неверно. Правильный ответ: ${correctLetter}) ${correctText}.<br>${q.explanation}`);
+        feedbackDiv.style.display = 'block';
+        document.querySelectorAll('.answer-btn').forEach((btn, idx) => {
+            btn.style.pointerEvents = 'none';
+            if (idx === q.correct) btn.style.backgroundColor = '#d4e6c3';
+            if (idx === selected && idx !== q.correct) btn.style.backgroundColor = '#f3cfc0';
+        });
+        const nextBtn = document.getElementById('nextQuestBtn');
+        nextBtn.style.display = 'block';
+        nextBtn.onclick = () => { currentIndex++; renderQuestion(); };
+    }
+
+    function renderDragDropQuestion(q) {
+        dragState = { remainingDrags: [...q.dragItems], remainingZones: [...q.dropZones], assignments: new Array(q.dropZones.length).fill(null) };
+        let html = `<div class="question-card"><div class="question-text">${q.text}</div>
+        <div class="drag-area"><div class="drag-items"><h4>📦 Элементы ловушки:</h4><div id="dragList"></div></div>
+        <div class="drop-zone"><h4>🎯 Место в конструкции:</h4><div id="dropZones"></div></div></div>
+        <div id="feedbackArea" class="feedback" style="display: none;"></div><button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Продолжить</button></div>`;
+        dynamicDiv.innerHTML = html;
+        const dragContainer = document.getElementById('dragList');
+        const dropContainer = document.getElementById('dropZones');
+        function renderDragDrop() {
+            dragContainer.innerHTML = '';
+            dropContainer.innerHTML = '';
+            dragState.remainingDrags.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = 'draggable';
+                div.textContent = item;
+                div.draggable = true;
+                div.ondragstart = (e) => { e.dataTransfer.setData('text/plain', item); };
+                dragContainer.appendChild(div);
+            });
+            dragState.remainingZones.forEach((zone, idx) => {
+                const slot = document.createElement('div');
+                slot.className = 'drop-slot';
+                slot.innerHTML = `<strong>${zone}:</strong> ${dragState.assignments[idx] ? dragState.assignments[idx] : '⬅️ перетащи сюда'}`;
+                if (dragState.assignments[idx]) slot.classList.add('filled');
+                slot.ondrop = (e) => { e.preventDefault(); const draggedItem = e.dataTransfer.getData('text/plain'); if (dragState.assignments[idx] || !dragState.remainingDrags.includes(draggedItem)) return; const dragIdx = dragState.remainingDrags.indexOf(draggedItem); if (dragIdx !== -1) { dragState.assignments[idx] = draggedItem; dragState.remainingDrags.splice(dragIdx,1); renderDragDrop(); } };
+                slot.ondragover = (e) => e.preventDefault();
+                dropContainer.appendChild(slot);
+            });
+        }
+        renderDragDrop();
+        const nextBtn = document.getElementById('nextQuestBtn');
+        nextBtn.onclick = () => {
+            if (answerLocked) return;
+            const isCorrect = dragState.assignments.every((val, idx) => val === q.dragItems[q.correctOrder[idx]]);
+            answerLocked = true;
+            if (isCorrect) { score += 10; addLegendPiece(true); updateStatsUI(); }
+            else addLegendPiece(false);
+            const fb = document.getElementById('feedbackArea');
+            let legendNote = (isCorrect && legendPieces.length) ? `<br>📜 Легенда: ${legendPieces[legendPieces.length-1]}` : '';
+            fb.innerHTML = (isCorrect ? `✅ ${q.feedback}<br>🌟 +10 знаний.${legendNote}` : `❌ Неправильно. ${q.explanation}`);
+            fb.style.display = 'block';
+            nextBtn.style.display = 'block';
+            nextBtn.onclick = () => { currentIndex++; renderQuestion(); };
+        };
+    }
+
+    function renderOddOneQuestion(q) {
+        oddSelected = false;
+        let html = `<div class="question-card"><div class="question-text">${q.text}</div><div class="items-grid" id="oddGrid"></div><div id="feedbackArea" class="feedback" style="display: none;"></div><button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Продолжить</button></div>`;
+        dynamicDiv.innerHTML = html;
+        const grid = document.getElementById('oddGrid');
+        q.items.forEach((item, idx) => {
+            const div = document.createElement('div');
+            div.className = 'food-item';
+            div.textContent = item;
+            div.onclick = () => {
+                if (oddSelected) return;
+                oddSelected = true;
+                const isCorrect = (idx === q.correctIndex);
+                if (isCorrect) { score += 10; addLegendPiece(true); updateStatsUI(); }
+                else addLegendPiece(false);
+                div.classList.add('selected-wrong');
+                const fb = document.getElementById('feedbackArea');
+                let legendNote = (isCorrect && legendPieces.length) ? `<br>📜 Легенда: ${legendPieces[legendPieces.length-1]}` : '';
+                fb.innerHTML = (isCorrect ? `✅ Верно! ${q.items[q.correctIndex]} — лишнее.<br>${q.explanation}<br>🌟 +10 знаний.${legendNote}` : `❌ Неверно. Лишнее — ${q.items[q.correctIndex]}.<br>${q.explanation}`);
+                fb.style.display = 'block';
+                document.getElementById('nextQuestBtn').style.display = 'block';
+            };
+            grid.appendChild(div);
+        });
+        const nextBtn = document.getElementById('nextQuestBtn');
+        nextBtn.onclick = () => { currentIndex++; renderQuestion(); };
+    }
+
+    function renderMatchingQuestion(q) {
+        matchState = { selectedLeft: null, matchedPairs: [], leftItems: [...q.leftItems], rightItems: [...q.rightItems] };
+        let html = `<div class="question-card"><div class="question-text">${q.text}</div>
+        <div class="match-area"><div class="match-left"><h4>🎩 Головные уборы:</h4><div id="leftList"></div></div>
+        <div class="match-right"><h4>📝 Описания:</h4><div id="rightList"></div></div></div>
+        <div id="matchInfo" class="match-pair-info"></div>
+        <div id="feedbackArea" class="feedback" style="display: none;"></div><button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Продолжить</button></div>`;
+        dynamicDiv.innerHTML = html;
+        function renderMatch() {
+            const leftDiv = document.getElementById('leftList');
+            const rightDiv = document.getElementById('rightList');
+            leftDiv.innerHTML = ''; rightDiv.innerHTML = '';
+            matchState.leftItems.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = 'match-card';
+                if (matchState.matchedPairs.some(p => p.leftIdx === idx)) card.classList.add('matched');
+                card.textContent = item;
+                card.onclick = () => {
+                    if (matchState.matchedPairs.some(p => p.leftIdx === idx)) return;
+                    if (matchState.selectedLeft === idx) { matchState.selectedLeft = null; document.getElementById('matchInfo').innerHTML = ''; renderMatch(); }
+                    else { matchState.selectedLeft = idx; document.getElementById('matchInfo').innerHTML = `👉 Выбрано: "${item}". Теперь кликните на описание.`; renderMatch(); }
+                };
+                if (matchState.selectedLeft === idx) card.classList.add('selected');
+                leftDiv.appendChild(card);
+            });
+            matchState.rightItems.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = 'match-card';
+                if (matchState.matchedPairs.some(p => p.rightIdx === idx)) card.classList.add('matched');
+                card.textContent = item;
+                card.onclick = () => {
+                    if (matchState.matchedPairs.some(p => p.rightIdx === idx)) return;
+                    if (matchState.selectedLeft !== null) {
+                        const leftIdx = matchState.selectedLeft;
+                        const isCorrectPair = q.correctPairs.some(p => p[0] === leftIdx && p[1] === idx);
+                        if (isCorrectPair) {
+                            matchState.matchedPairs.push({ leftIdx, rightIdx: idx });
+                            matchState.selectedLeft = null;
+                            document.getElementById('matchInfo').innerHTML = '✅ Сопоставлено верно!';
+                            renderMatch();
+                            if (matchState.matchedPairs.length === q.leftItems.length) {
+                                document.getElementById('feedbackArea').innerHTML = `✅ Отлично! Все уборы сопоставлены!<br>${q.explanation}<br>🌟 +10 знаний.`;
+                                document.getElementById('feedbackArea').style.display = 'block';
+                                document.getElementById('nextQuestBtn').style.display = 'block';
+                                score += 10; addLegendPiece(true); updateStatsUI();
+                                answerLocked = true;
+                            }
+                        } else {
+                            document.getElementById('matchInfo').innerHTML = '❌ Неправильная пара. Попробуйте снова.';
+                            matchState.selectedLeft = null;
+                            renderMatch();
+                        }
+                    }
+                };
+                rightDiv.appendChild(card);
+            });
+        }
+        renderMatch();
+        const nextBtn = document.getElementById('nextQuestBtn');
+        nextBtn.onclick = () => { currentIndex++; renderQuestion(); };
     }
 
     function finishGame() {
         gameFinished = true;
-        let title = '', advice = '', emoji = '';
-        if (score === TOTAL_QS * 10) {
-            title = '🏅 Марийский профессор!';
-            advice = 'Вы — настоящий эксперт!';
-            emoji = '🎓✨';
-        } else if (score >= 50) {
-            title = '📚 Знаток марийской культуры';
-            advice = 'Очень хороший результат!';
-            emoji = '🌟';
-        } else if (score >= 30) {
-            title = '🧐 Этнограф-любитель';
-            advice = 'Неплохо! У вас есть шансы узнать подробнее о марийцах.';
-            emoji = '📖';
+        const maxScore = TOTAL_QS * 10;
+        let endingTitle = '', endingStory = '';
+        let fullLegend = legendPieces.length ? `<div class="legend-box">📖 Сказание о Чоткар-патыре:<br>${legendPieces.map(p=>p).join(' → ')}</div>` : `<div class="legend-box">🍂 Легенда ждёт нового исследователя.</div>`;
+        if (score >= 70) {
+            endingTitle = '🏅 «Хранитель предания»';
+            endingStory = `Ваши знания — ${score} из ${maxScore}. Дух Чоткар-патыра является вам: «Ты собрал легенду, этнограф. Отныне ты — хранитель марийской старины. Имя тебе "Память леса"». Старейшины кланяются.`;
+        } else if (score >= 40) {
+            endingTitle = '🌿 «Ученик карта»';
+            endingStory = `Ваш результат — ${score} очков. Карт Михаил говорит: «Ты многое узнал. Оставайся в деревне — я научу тебя играть на шувыре и различать голоса духов».`;
         } else {
-            title = '🌱 Первооткрыватель';
-            advice = 'Вы сделали первые шаги. У вас есть шансы узнать подробнее о марийцах.';
-            emoji = '🔍';
+            endingTitle = '🍃 «Путник с вопросом»';
+            endingStory = `У вас ${score} баллов. Старушка Анисья дарит вам оберег: «Ты не разбудил богатыря, но сердце твоё открыто. Приезжай ещё — знание не приходит в один день».`;
         }
-        
-        const maxPossible = TOTAL_QS * 10;
-        const endingHtml = `
-            <div class="ending">
-                <h2>🎬 Завершение экспедиции</h2>
-                <p style="font-size: 1.3rem;">${emoji} ${title}</p>
-                <p>Ваш счёт: <strong>${score}</strong> из ${maxPossible} очков.</p>
-                <p>${advice}</p>
-                <p>📌 Вы узнали о марийцах: похоронные обряды, охота, цвета одежды, танцы, земледелие, религия и многое другое.</p>
-                <button id="fullRestartBtn" class="restart-btn">🔄 Пройти заново</button>
-            </div>
-        `;
-        dynamicDiv.innerHTML = endingHtml;
-        const restart = document.getElementById('fullRestartBtn');
-        if (restart) {
-            restart.addEventListener('click', () => {
-                currentIndex = 0;
-                score = 0;
-                gameFinished = false;
-                answerLocked = false;
-                updateStatsUI();
-                renderQuestion();
-            });
-        }
+        dynamicDiv.innerHTML = `<div class="ending"><h2>🔮 Разгадка руны</h2><p style="font-size:1.4rem;font-weight:bold;">${endingTitle}</p><p>${endingStory}</p><p><strong>Итог:</strong> ${score} / ${maxScore} знаний.</p>${fullLegend}<button id="fullRestartBtn" class="restart-btn">🌲 Начать новое путешествие</button></div>`;
+        document.getElementById('fullRestartBtn')?.addEventListener('click', () => { currentIndex = 0; score = 0; gameFinished = false; legendPieces = []; updateStatsUI(); renderQuestion(); });
         currentQNumSpan.innerText = TOTAL_QS;
     }
-    
     renderQuestion();
     updateStatsUI();
 </script>
