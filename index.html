@@ -127,52 +127,60 @@
             justify-content: center;
             border-radius: 50%;
         }
-        /* Drag&Drop стили */
-        .drag-area {
+        /* Новый стиль для 2-го испытания — сборка снаряжения */
+        .gear-assembly {
             display: flex;
             gap: 30px;
             flex-wrap: wrap;
             justify-content: center;
             margin: 20px 0;
         }
-        .drag-items {
+        .gear-items {
             flex: 1;
-            min-width: 220px;
+            min-width: 200px;
             background: #e8dcc2;
             border-radius: 28px;
             padding: 20px;
         }
-        .drop-zone {
+        .gear-slot {
+            background: #fef5e6;
+            border: 2px dashed #a5763a;
+            margin: 12px 0;
+            padding: 12px;
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .gear-slot:hover { background: #efe1c7; }
+        .gear-slot.selected { background: #c9b06b; border: 2px solid #2c5e1a; }
+        .gear-slot.filled { background: #cfe2cf; border: 2px solid #3f8227; cursor: default; }
+        .gear-slot.filled:hover { background: #cfe2cf; }
+        .gear-description {
+            font-size: 0.85rem;
+            color: #5a3e28;
+            margin-top: 5px;
+        }
+        .items-pool {
             flex: 1;
-            min-width: 260px;
+            min-width: 200px;
             background: #e8dcc2;
             border-radius: 28px;
             padding: 20px;
         }
-        .draggable {
+        .item-card {
             background: #dbbc87;
             margin: 10px 0;
             padding: 12px;
             border-radius: 20px;
-            cursor: grab;
             text-align: center;
+            cursor: pointer;
+            transition: 0.1s;
             font-weight: bold;
-            transition: 0.1s;
         }
-        .draggable:active { cursor: grabbing; }
-        .draggable.dragging { opacity: 0.5; }
-        .drop-slot {
-            background: #fef5e6;
-            border: 2px dashed #a5763a;
-            margin: 10px 0;
-            padding: 12px;
-            border-radius: 20px;
-            min-height: 55px;
-            text-align: center;
-            transition: 0.1s;
-        }
-        .drop-slot.drag-over { background: #d4e6c3; border-color: #3f8227; }
-        .drop-slot.filled { background: #cfe2cf; border: 2px solid #3f8227; }
+        .item-card:hover { background: #c9a86b; transform: scale(1.02); }
+        .item-card.used { background: #a8c9a3; opacity: 0.5; cursor: default; text-decoration: line-through; }
+        .item-card.used:hover { transform: none; }
         /* Стили для "найди лишнее" */
         .items-grid {
             display: flex;
@@ -267,7 +275,7 @@
             .game-box { padding: 16px; }
             .story-header { margin: -16px -16px 20px -16px; padding: 16px; }
             .question-text { font-size: 1.2rem; }
-            .drag-area { flex-direction: column; }
+            .gear-assembly { flex-direction: column; }
             .match-area { flex-direction: column; }
         }
     </style>
@@ -289,7 +297,7 @@
 
 <script>
     // ============================================================
-    // 8 ВОПРОСОВ (3 интерактивных формата)
+    // 8 ВОПРОСОВ (2-е испытание полностью переделано)
     // ============================================================
     const questions = [
         {
@@ -305,13 +313,23 @@
             explanation: "✨ По верованиям мари, в царстве мёртвых душе нужны ногти, чтобы карабкаться по горам, шиповник — отогнать стража-змея, а по холсту перейти в загробный мир."
         },
         {
-            type: 'dragdrop',
-            text: "🏹 Луговые марийцы славились как искусные охотники. Соберите правильную ловушку для глухаря: перетащите элементы конструкции в нужном порядке (все 3 элемента уникальны, порядок важен!).",
-            dragItems: ["Плетёная корзина (основание)", "Захлопывающаяся крышка", "Приманка (рябина/калина)"],
-            dropZones: ["1. Что служит основанием ловушки?", "2. Что захлопывается, когда птица заходит?", "3. Что привлекает глухаря внутрь?"],
-            correctOrder: [0, 1, 2],
-            explanation: "📖 Оригинальная ловушка: плетёная корзина-основание, сверху — захлопывающаяся крышка на пружине, внутри — приманка из ягод. Глухарь заходил за приманкой — крышка захлопывалась.",
-            feedback: "Верно! Вы собрали классическую марийскую ловушку для глухаря."
+            type: 'gears',
+            text: "🏹 Перед охотой на медведя марийский охотник должен правильно собрать своё снаряжение. Выберите из предложенных предметов ТРИ, которые действительно использовали марийцы, и разместите их в нужном порядке:",
+            gearSlots: [
+                { name: "Оружие для ближнего боя", description: "Чем мариец добивал медведя в опасной близости?" },
+                { name: "Оружие для дистанционного удара", description: "Что использовали, чтобы поразить зверя издалека, не испортив шкуру?" },
+                { name: "Специальная обувь", description: "В чём лазали на высокие деревья за мёдом (это же пригодилось и в охоте)?" }
+            ],
+            itemsPool: [
+                { name: "Нож и рогатина", correct: true, slotIndex: 0 },
+                { name: "Лук со стрелами", correct: true, slotIndex: 1 },
+                { name: "Маскайол (обувь с шипами)", correct: true, slotIndex: 2 },
+                { name: "Огнестрельное ружьё", correct: false, slotIndex: null },
+                { name: "Капкан-давилка", correct: false, slotIndex: null },
+                { name: "Отравленные стрелы", correct: false, slotIndex: null }
+            ],
+            explanation: "📖 Марийцы славились как отличные охотники: не боялись медведя, били его ножом и рогатиной, стреляли из лука в голову, чтобы не испортить шкурку. А маскайол — «медвежьи лапы» — обувь с шипами для лазания на деревья за мёдом.",
+            feedback: "Верно! Вы собрали правильное снаряжение марийского охотника."
         },
         {
             type: 'choice',
@@ -391,7 +409,7 @@
     let legendPieces = [];
     
     // Состояния для интерактивных заданий
-    let dragState = { remainingDrags: [], remainingZones: [], assignments: [] };
+    let gearState = { slots: [], availableItems: [], selectedSlot: null };
     let matchState = { selectedLeft: null, matchedPairs: [] };
     let oddSelected = false;
 
@@ -427,7 +445,7 @@
         const q = questions[currentIndex];
         answerLocked = false;
         if (q.type === 'choice') renderChoiceQuestion(q);
-        else if (q.type === 'dragdrop') renderDragDropQuestion(q);
+        else if (q.type === 'gears') renderGearQuestion(q);
         else if (q.type === 'oddone') renderOddOneQuestion(q);
         else if (q.type === 'matching') renderMatchingQuestion(q);
     }
@@ -470,88 +488,93 @@
         nextBtn.onclick = () => { currentIndex++; renderQuestion(); };
     }
 
-    function renderDragDropQuestion(q) {
-        dragState = { 
-            remainingDrags: [...q.dragItems], 
-            remainingZones: [...q.dropZones], 
-            assignments: new Array(q.dropZones.length).fill(null) 
+    // НОВОЕ 2-Е ИСПЫТАНИЕ — сборка снаряжения
+    function renderGearQuestion(q) {
+        gearState = {
+            slots: q.gearSlots.map((slot, idx) => ({ ...slot, filledWith: null, filled: false })),
+            availableItems: q.itemsPool.map(item => ({ ...item, used: false })),
+            selectedSlot: null
         };
         
         let html = `<div class="question-card"><div class="question-text">${q.text}</div>
-        <div class="drag-area">
-            <div class="drag-items"><h4>📦 Элементы ловушки:</h4><div id="dragList"></div></div>
-            <div class="drop-zone"><h4>🎯 Куда их разместить?</h4><div id="dropZones"></div></div>
+        <div class="gear-assembly">
+            <div class="gear-items"><h4>🎯 Снаряжение охотника:</h4><div id="gearSlots"></div></div>
+            <div class="items-pool"><h4>📦 Доступные предметы:</h4><div id="itemsPool"></div></div>
         </div>
         <div id="feedbackArea" class="feedback" style="display: none;"></div>
-        <button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Продолжить поиск легенды</button>
+        <button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Проверить и продолжить</button>
         </div>`;
         dynamicDiv.innerHTML = html;
         
-        const dragContainer = document.getElementById('dragList');
-        const dropContainer = document.getElementById('dropZones');
-        
-        function renderDragDrop() {
-            dragContainer.innerHTML = '';
-            dropContainer.innerHTML = '';
+        function renderGear() {
+            const slotsContainer = document.getElementById('gearSlots');
+            const itemsContainer = document.getElementById('itemsPool');
+            slotsContainer.innerHTML = '';
+            itemsContainer.innerHTML = '';
             
-            dragState.remainingDrags.forEach((item, idx) => {
-                const div = document.createElement('div');
-                div.className = 'draggable';
-                div.textContent = item;
-                div.draggable = true;
-                div.setAttribute('data-item', item);
-                div.ondragstart = (e) => { 
-                    e.dataTransfer.setData('text/plain', item);
-                    div.classList.add('dragging');
-                };
-                div.ondragend = (e) => { div.classList.remove('dragging'); };
-                dragContainer.appendChild(div);
+            gearState.slots.forEach((slot, idx) => {
+                const slotDiv = document.createElement('div');
+                slotDiv.className = 'gear-slot';
+                if (gearState.selectedSlot === idx) slotDiv.classList.add('selected');
+                if (slot.filled) slotDiv.classList.add('filled');
+                slotDiv.innerHTML = `<strong>${slot.name}</strong><div class="gear-description">${slot.description}</div>
+                ${slot.filled ? `<div style="margin-top:8px;">✅ ${slot.filledWith}</div>` : '⬅️ кликни, чтобы выбрать'}`;
+                if (!slot.filled) {
+                    slotDiv.onclick = () => {
+                        if (answerLocked) return;
+                        gearState.selectedSlot = idx;
+                        renderGear();
+                    };
+                }
+                slotsContainer.appendChild(slotDiv);
             });
             
-            dragState.remainingZones.forEach((zone, idx) => {
-                const slot = document.createElement('div');
-                slot.className = 'drop-slot';
-                if (dragState.assignments[idx]) slot.classList.add('filled');
-                slot.innerHTML = `<strong>${zone}</strong><br>${dragState.assignments[idx] ? `✅ ${dragState.assignments[idx]}` : '⬅️ перетащи элемент сюда'}`;
-                
-                slot.ondragover = (e) => { 
-                    e.preventDefault(); 
-                    slot.classList.add('drag-over');
-                };
-                slot.ondragleave = (e) => { slot.classList.remove('drag-over'); };
-                slot.ondrop = (e) => { 
-                    e.preventDefault();
-                    slot.classList.remove('drag-over');
-                    const draggedItem = e.dataTransfer.getData('text/plain');
-                    if (dragState.assignments[idx] !== null) return;
-                    if (!dragState.remainingDrags.includes(draggedItem)) return;
-                    const dragIdx = dragState.remainingDrags.indexOf(draggedItem);
-                    if (dragIdx !== -1) {
-                        dragState.assignments[idx] = draggedItem;
-                        dragState.remainingDrags.splice(dragIdx, 1);
-                        renderDragDrop();
-                    }
-                };
-                dropContainer.appendChild(slot);
+            gearState.availableItems.forEach((item, idx) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'item-card';
+                if (item.used) itemDiv.classList.add('used');
+                itemDiv.textContent = item.name;
+                if (!item.used && gearState.selectedSlot !== null && !answerLocked) {
+                    itemDiv.onclick = () => {
+                        if (answerLocked) return;
+                        const slotIdx = gearState.selectedSlot;
+                        if (gearState.slots[slotIdx].filled) return;
+                        gearState.slots[slotIdx].filledWith = item.name;
+                        gearState.slots[slotIdx].filled = true;
+                        gearState.availableItems[idx].used = true;
+                        gearState.selectedSlot = null;
+                        renderGear();
+                    };
+                }
+                itemsContainer.appendChild(itemDiv);
             });
         }
         
-        renderDragDrop();
+        renderGear();
         
         const nextBtn = document.getElementById('nextQuestBtn');
         nextBtn.onclick = () => {
             if (answerLocked) return;
-            // Проверяем, что все зоны заполнены
-            if (dragState.assignments.some(val => val === null)) {
+            // Проверяем, что все слоты заполнены
+            if (gearState.slots.some(slot => !slot.filled)) {
                 const fb = document.getElementById('feedbackArea');
-                fb.innerHTML = '⚠️ Вы ещё не разместили все элементы! Перетащите все три детали ловушки в правильные места.';
+                fb.innerHTML = '⚠️ Вы ещё не собрали всё снаряжение! Заполните все три слота правильными предметами.';
                 fb.style.display = 'block';
                 return;
             }
-            // Проверяем правильность порядка
-            const isCorrect = dragState.assignments.every((val, idx) => val === q.dragItems[q.correctOrder[idx]]);
+            // Проверяем правильность выбора предметов
+            let allCorrect = true;
+            for (let i = 0; i < gearState.slots.length; i++) {
+                const filledItem = gearState.slots[i].filledWith;
+                const correctItem = q.itemsPool.find(item => item.slotIndex === i && item.correct);
+                if (!correctItem || correctItem.name !== filledItem) {
+                    allCorrect = false;
+                    break;
+                }
+            }
+            
             answerLocked = true;
-            if (isCorrect) { 
+            if (allCorrect) { 
                 score += 10; 
                 addLegendPiece(true); 
                 updateStatsUI();
@@ -559,20 +582,14 @@
                 addLegendPiece(false);
             }
             const fb = document.getElementById('feedbackArea');
-            let legendNote = (isCorrect && legendPieces.length) ? `<br>📜 Легенда: ${legendPieces[legendPieces.length-1]}` : '';
-            if (isCorrect) {
+            let legendNote = (allCorrect && legendPieces.length) ? `<br>📜 Легенда: ${legendPieces[legendPieces.length-1]}` : '';
+            if (allCorrect) {
                 fb.innerHTML = `✅ ${q.feedback}<br>🌟 +10 знаний.${legendNote}<br>${q.explanation}`;
             } else {
-                fb.innerHTML = `❌ Неправильно. ${q.explanation}<br>Правильный порядок: 1) ${q.dragItems[0]}, 2) ${q.dragItems[1]}, 3) ${q.dragItems[2]}.`;
+                fb.innerHTML = `❌ Неправильно. ${q.explanation}<br>Правильные предметы: 1) Нож и рогатина, 2) Лук со стрелами, 3) Маскайол (обувь с шипами).`;
             }
             fb.style.display = 'block';
             nextBtn.style.display = 'block';
-            // Убираем возможность дальнейшего перетаскивания
-            document.querySelectorAll('.draggable').forEach(el => el.draggable = false);
-            document.querySelectorAll('.drop-slot').forEach(el => {
-                el.ondrop = null;
-                el.ondragover = null;
-            });
             nextBtn.onclick = () => { currentIndex++; renderQuestion(); };
         };
     }
@@ -703,19 +720,4 @@
         if (score >= 70) {
             endingTitle = '🏅 «Хранитель предания»';
             endingStory = `Ваши знания — ${score} из ${maxScore}. Дух Чоткар-патыра является вам: «Ты собрал легенду, этнограф. Отныне ты — хранитель марийской старины. Имя тебе "Память леса"». Старейшины кланяются.`;
-        } else if (score >= 40) {
-            endingTitle = '🌿 «Ученик карта»';
-            endingStory = `Ваш результат — ${score} очков. Карт Михаил говорит: «Ты многое узнал. Оставайся в деревне — я научу тебя играть на шувыре и различать голоса духов».`;
-        } else {
-            endingTitle = '🍃 «Путник с вопросом»';
-            endingStory = `У вас ${score} баллов. Старушка Анисья дарит вам оберег: «Ты не разбудил богатыря, но сердце твоё открыто. Приезжай ещё — знание не приходит в один день».`;
-        }
-        dynamicDiv.innerHTML = `<div class="ending"><h2>🔮 Разгадка руны</h2><p style="font-size:1.4rem;font-weight:bold;">${endingTitle}</p><p>${endingStory}</p><p><strong>Итог:</strong> ${score} / ${maxScore} знаний.</p>${fullLegend}<button id="fullRestartBtn" class="restart-btn">🌲 Начать новое путешествие</button></div>`;
-        document.getElementById('fullRestartBtn')?.addEventListener('click', () => { currentIndex = 0; score = 0; gameFinished = false; legendPieces = []; updateStatsUI(); renderQuestion(); });
-        currentQNumSpan.innerText = TOTAL_QS;
-    }
-    renderQuestion();
-    updateStatsUI();
-</script>
-</body>
-</html>
+       
