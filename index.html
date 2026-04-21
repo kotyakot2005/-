@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Тайна марийской руны — этнографическое приключение</title>
+    <title>Марийский этнограф — смешанная викторина</title>
     <style>
         * {
             box-sizing: border-box;
         }
         body {
             font-family: 'Segoe UI', 'Roboto', 'Georgia', serif;
-            background: linear-gradient(145deg, #1a3a15 0%, #2e2a1a 100%);
+            background: linear-gradient(145deg, #2c2b26 0%, #4a3b28 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -19,130 +19,194 @@
             margin: 0;
         }
         .game-box {
-            max-width: 880px;
+            max-width: 850px;
             width: 100%;
-            background: #fef5e6;
-            border-radius: 48px;
-            box-shadow: 0 25px 45px rgba(0,0,0,0.6);
+            background: #fef7e0;
+            border-radius: 56px;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.5);
             overflow: hidden;
-            padding: 20px 28px 32px;
-            border: 1px solid #e2bc7c;
-        }
-        .story-header {
-            background: #3d2a1a;
-            margin: -20px -28px 20px -28px;
-            padding: 22px 28px 18px;
-            color: #ffefcf;
-            border-bottom: 4px solid #dba551;
-            position: relative;
+            padding: 25px 30px 35px;
+            border: 1px solid #e9cf9e;
         }
         h1 {
-            font-size: 1.7rem;
-            margin: 0 0 8px 0;
+            font-size: 1.8rem;
+            text-align: center;
+            margin: 0 0 5px 0;
+            color: #3a5e2b;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 12px;
             flex-wrap: wrap;
         }
-        .story-text {
-            font-style: italic;
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin-top: 8px;
-            line-height: 1.4;
-        }
-        .journal-badge {
-            background: #dba551;
-            display: inline-block;
+        h1 small {
+            font-size: 0.8rem;
+            background: #dac282;
             padding: 4px 14px;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            color: #2d1f0f;
-            margin-top: 10px;
-            font-weight: bold;
+            border-radius: 50px;
+            color: #2c2b1f;
+            font-weight: normal;
+        }
+        .subhead {
+            text-align: center;
+            color: #7a5a3a;
+            border-bottom: 1px dashed #e2ca9c;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            font-style: italic;
         }
         .stats-bar {
-            background: #e8dcc2;
-            border-radius: 40px;
+            background: #e7dbbc;
+            border-radius: 60px;
             padding: 8px 18px;
             display: flex;
             justify-content: space-between;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
+            gap: 10px;
         }
         .score, .question-counter {
-            background: #5a3e28;
-            color: #fef0db;
-            padding: 5px 18px;
-            border-radius: 30px;
+            background: #4f6b32;
+            color: #fef2da;
+            padding: 5px 16px;
+            border-radius: 40px;
         }
         .question-card {
-            background: #fffaf2;
-            border-radius: 40px;
+            background: #fffaf0;
+            border-radius: 48px;
             padding: 20px 25px;
-            box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
         .question-text {
-            font-size: 1.4rem;
+            font-size: 1.45rem;
             font-weight: 600;
-            color: #2b5320;
+            color: #2b4223;
             line-height: 1.3;
-            margin-bottom: 24px;
-            border-left: 5px solid #c6913a;
+            margin-bottom: 25px;
+            border-left: 5px solid #c9a86b;
             padding-left: 20px;
         }
         .answers {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
         }
         .answer-btn {
             background: #ffffff;
-            border: 2px solid #dbbc87;
-            border-radius: 60px;
+            border: 2px solid #decb9e;
+            border-radius: 100px;
             padding: 12px 20px;
             font-size: 1rem;
             text-align: left;
             cursor: pointer;
             transition: 0.1s;
             font-weight: 500;
-            color: #2f3b1f;
+            color: #2f3b25;
             display: flex;
             align-items: center;
             gap: 12px;
         }
         .answer-btn:hover:not(:disabled) {
-            background: #efe1c7;
-            border-color: #b5762c;
+            background: #f2e5cf;
+            border-color: #b58b40;
             transform: scale(0.99);
         }
         .answer-letter {
             font-weight: bold;
-            background: #ddceaa;
-            width: 34px;
-            height: 34px;
+            background: #e6d5b5;
+            width: 32px;
+            height: 32px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
+            border-radius: 60px;
+        }
+        .true-false-btns {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .tf-btn {
+            background: #ffffff;
+            border: 2px solid #decb9e;
+            border-radius: 60px;
+            padding: 15px 30px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .tf-btn:hover {
+            background: #f2e5cf;
+            transform: scale(0.98);
+        }
+        .sort-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .sort-category {
+            background: #e7dbbc;
+            border-radius: 24px;
+            padding: 15px;
+            flex: 1;
+            min-width: 180px;
+        }
+        .sort-category h4 {
+            text-align: center;
+            margin: 0 0 12px 0;
+            color: #3a5e2b;
+        }
+        .sort-dropzone {
+            min-height: 150px;
+            background: #fffaf0;
+            border: 2px dashed #c9a86b;
+            border-radius: 20px;
+            padding: 10px;
+        }
+        .sort-card {
+            background: #c9a86b;
+            color: white;
+            padding: 8px 12px;
+            margin: 6px;
+            border-radius: 40px;
+            display: inline-block;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .sort-card.unplaced {
+            background: #7b5f3a;
+            cursor: pointer;
+        }
+        .input-field {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1.1rem;
+            border: 2px solid #decb9e;
+            border-radius: 60px;
+            margin: 15px 0;
+            font-family: inherit;
         }
         .feedback {
             margin-top: 20px;
             padding: 14px 20px;
-            border-radius: 32px;
-            background: #efe0c6;
-            color: #2c4a1f;
-            border-left: 6px solid #c6913a;
-            font-size: 0.95rem;
+            border-radius: 40px;
+            background: #efe2cb;
+            color: #2c4722;
+            font-weight: 500;
+            border-left: 8px solid #c9a86b;
         }
         .next-btn, .restart-btn {
-            background: #7b5a36;
+            background: #7b5f3a;
             border: none;
             color: white;
-            padding: 12px 20px;
-            font-size: 1rem;
+            padding: 12px 24px;
+            font-size: 1.1rem;
             border-radius: 40px;
             font-weight: bold;
             cursor: pointer;
@@ -151,142 +215,132 @@
             transition: 0.1s;
         }
         .next-btn:hover, .restart-btn:hover {
-            background: #553b1f;
+            background: #5c4528;
+            transform: scale(0.98);
         }
         .ending {
             text-align: center;
-            background: #f2e5cf;
-            border-radius: 40px;
-            padding: 24px 20px;
+            background: #e3cfaa;
+            border-radius: 48px;
+            padding: 20px;
             margin-top: 10px;
-        }
-        .legend-box {
-            background: #e2d0ae;
-            border-radius: 28px;
-            padding: 16px;
-            margin: 16px 0;
-            text-align: left;
-            font-style: italic;
-            border-left: 4px solid #a5763a;
         }
         footer {
             text-align: center;
             font-size: 0.7rem;
-            color: #b69154;
-            margin-top: 22px;
+            color: #ad946b;
+            margin-top: 25px;
         }
-        @media (max-width: 550px) {
-            .game-box { padding: 16px; }
-            .story-header { margin: -16px -16px 20px -16px; padding: 16px; }
+        @media (max-width: 600px) {
+            .game-box { padding: 18px; }
             .question-text { font-size: 1.2rem; }
+            .sort-container { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 <div class="game-box" id="gameRoot">
-    <div class="story-header">
-        <h1>🗝️ Тайна марийской руны <span style="font-size:1rem;">дневник этнографа</span></h1>
-        <div class="story-text">📍 Марий Эл, наши дни. Вы — молодой исследователь. В заброшенной деревне Кожлаял вы нашли древний деревянный амулет с письменами. Местный старейшина, карт Михаил, сказал: «Это руна Чоткар-патыря — героя, что спал 100 лет. Кто соберёт все части легенды, тот услышит его голос». Ваше знание марийской культуры — единственный ключ.</div>
-        <div class="journal-badge">📓 ДНЕВНИК ЭТНОГРАФА: легенда собирается по крупицам</div>
-    </div>
+    <h1>🧑‍🏛️ Марийский этнограф <small>смешанные форматы</small></h1>
+    <div class="subhead">📖 8 вопросов: викторина, «верно/не верно», сортировка, ввод слова</div>
     <div class="stats-bar">
-        <span class="score">🏆 Знаний: <span id="scoreValue">0</span></span>
-        <span class="question-counter">📖 Испытание <span id="currentQNum">1</span> / <span id="totalQ">8</span></span>
+        <span class="score">🏆 Счёт: <span id="scoreValue">0</span></span>
+        <span class="question-counter">❓ Вопрос <span id="currentQNum">1</span> / <span id="totalQ">8</span></span>
     </div>
     <div id="dynamicContent"></div>
-    <footer>🌲 Сосновый лес хранит ответы. Каждый верный шаг приближает к голосу предков.</footer>
+    <footer>📚 Основано на документе «Марийский народ.doc»</footer>
 </div>
 
 <script>
-    // Вопросы (8 штук) — 7-й про одежду, 8-й про языки
+    // ВОПРОСЫ С РАЗНЫМИ ФОРМАТАМИ
+    // type: 'choice' - обычная викторина
+    // type: 'truefalse' - верно/не верно
+    // type: 'sort' - сортировка (две категории)
+    // type: 'fillblank' - ввод слова
+
     const questions = [
-        {
-            text: "🗿 В древних марийских захоронениях археологи находят ногти, ветки шиповника и кусок холста. Для чего, по поверьям, нужны эти предметы?",
+        { // 0 - обычная викторина
+            type: 'choice',
+            text: "🗿 Вы нашли древнее марийское захоронение. В могиле лежат ногти, шиповник и холст. Что это значит?",
             options: [
-                "А) Чтобы защитить тело от зверей",
-                "Б) Ногти — чтобы цепляться за скалы в мире мёртвых, шиповник — отогнать змею, холст — мост для души",
-                "В) Это символы плодородия",
-                "Г) Чтобы душа не вернулась обратно"
+                "А) Бытовые предметы, случайно попавшие в могилу",
+                "Б) Ритуал: ногти для скал, шиповник от змеи, холст — мост в загробный мир",
+                "В) Охотничьи талисманы",
+                "Г) Средства для лечения"
             ],
             correct: 1,
-            explanation: "✨ По верованиям мари, в царстве мёртвых душе нужны ногти, чтобы карабкаться по горам, шиповник — отогнать стража-змея, а по холсту перейти в загробный мир."
+            explanation: "✅ По марийским поверьям, ногти нужны, чтобы цепляться за скалы в царстве мёртвых, шиповник отгоняет змею и собаку у входа, холст — мост для души."
         },
-        {
-            text: "🏹 Луговые марийцы славились как искусные охотники. Какую хитрую ловушку они использовали на глухарей и тетеревов?",
+        { // 1 - обычная викторина
+            type: 'choice',
+            text: "🏹 Какой оригинальный способ охоты на глухаря использовали луговые марийцы?",
             options: [
-                "А) Яму с кольями",
-                "Б) Плетёную корзину с захлопывающейся крышкой",
-                "В) Сети, растянутые между деревьями",
-                "Г) Приманку с сонным зельем"
+                "А) Ловили силками на ветках",
+                "Б) Плетёная корзина с захлопывающейся крышкой",
+                "В) Стреляли из лука ночью",
+                "Г) Травили собаками"
             ],
             correct: 1,
-            explanation: "📖 Ловушка в виде плетёной корзины с захлопывающейся крышкой — уникальное изобретение марийских охотников для глухарей, рябчиков и даже куниц."
+            explanation: "📖 Марийцы применяли ловушку в виде плетёной корзины с захлопывающейся крышкой — для глухарей, тетеревов и куниц."
         },
-        {
-            text: "🎵 На марийском празднике вы слышите завораживающую музыку. Один инструмент напоминает волынку, а танец называется «верёвочка». Как их называют сами марийцы?",
+        { // 2 - ВЕРНО / НЕ ВЕРНО (про одежду)
+            type: 'truefalse',
+            text: "🎭 Традиционный цвет марийской одежды — красный, а белый используется только в свадебных костюмах.",
+            correct: false,  // не верно
+            explanation: "❌ Не верно. Основной цвет марийского костюма — белый (домотканый холст). Красный — акцентный цвет-оберег в вышивке, но не основной."
+        },
+        { // 3 - обычная викторина (танец и музыка)
+            type: 'choice',
+            text: "🎵 Как называются традиционный марийский танец и инструмент, похожий на волынку?",
             options: [
-                "А) «Тарпан» и «мурда»",
-                "Б) «Кандыра» и «шувыр»",
-                "В) «Шымакш» и «карт»",
-                "Г) «Ошмари» и «салам»"
+                "А) Тарпан и мурда",
+                "Б) Кандыра («Верёвочка») и шувыр",
+                "В) Шымакш и карт",
+                "Г) Ошмари и салам"
             ],
             correct: 1,
-            explanation: "🎶 Танец-«верёвочка» — кандыра (его ритм отбивают ногами, будто плетут узор), а шувыр — древняя марийская волынка из бычьего пузыря и петушиных перьев."
+            explanation: "🎵 Танец — кандыра («Верёвочка»), инструмент — шувыр (разновидность волынки)."
         },
-        {
-            text: "📜 В древнерусских летописях упоминается исчезнувший народ меря. Кем они приходятся современным марийцам?",
-            options: [
-                "А) Прямыми предками",
-                "Б) Отдельным этносом, но близкой роднёй, жившей западнее",
-                "В) Врагами, которых марийцы изгнали",
-                "Г) Скифским племенем, пришедшим с юга"
+        { // 4 - СОРТИРОВКА (земледелие vs охота/рыболовство)
+            type: 'sort',
+            text: "🏺 Распределите орудия и занятия по категориям: «Земледелие» и «Охота / рыболовство».",
+            categories: ["Земледелие", "Охота / рыболовство"],
+            items: [
+                { name: "Соха (шага)", category: "Земледелие" },
+                { name: "Плетёная корзина-ловушка", category: "Охота / рыболовство" },
+                { name: "Сабан (татарский плуг)", category: "Земледелие" },
+                { name: "Морда (мурда) для рыбы", category: "Охота / рыболовство" }
             ],
-            correct: 1,
-            explanation: "🧬 Историки спорят до сих пор: возможно, меря — отдельный финно-угорский народ, близкий марийцам по языку и культуре, но живший на территории современных Ярославской и Ивановской областей."
+            explanation: "✅ Соха и сабан — орудия земледелия. Корзина-ловушка и морда — для охоты и рыболовства."
         },
-        {
-            text: "🍲 Вас пригласили на марийское застолье. Какое блюдо вряд ли увидят на традиционном столе?",
+        { // 5 - обычная викторина (субэтносы)
+            type: 'choice',
+            text: "🏞️ Кто такие «кырык мары» и где они живут?",
             options: [
-                "А) Вареники с мясом и суп с клецками",
-                "Б) Пироги с конопляным семенем",
-                "В) Борщ с пампушками и оливье",
-                "Г) Вяленая колбаса из конины"
+                "А) Луговые марийцы, междуречье Волги и Вятки",
+                "Б) Восточные марийцы, в Башкирии",
+                "В) Горные марийцы, правый берег Волги",
+                "Г) Северо-западные марийцы, Кировская область"
             ],
             correct: 2,
-            explanation: "🥣 Борщ и оливье — заимствованные блюда. Аутентичная кухня марийцев включала мясо белки, ужа, филина, пельмени, колбасу из конины и лепёшки из конопляного семени."
+            explanation: "🏔️ Кырык мары — горные марийцы. Живут на правом берегу Волги (и частично левом) на западе Марий Эл."
         },
-        {
-            text: "🏞️ Вы встречаете группу, которая называет себя «кырык мары». Кто они и где живут?",
-            options: [
-                "А) Луговые марийцы (Олык марий) — в междуречье Волги и Вятки",
-                "Б) Восточные марийцы (Эрвел мари) — в Башкирии",
-                "В) Горные марийцы — на правом берегу Волги",
-                "Г) Северо-западные марийцы — в Кировской области"
-            ],
-            correct: 2,
-            explanation: "🏔️ Кырык мары — горные марийцы. Их название происходит от «кырык» (гора). Они живут на правом, возвышенном берегу Волги и дольше контактировали с чувашами и русскими."
+        { // 6 - ВВОД СЛОВА (религия)
+            type: 'fillblank',
+            text: "🕯️ Верховного бога марийцев-язычников, сохранивших традиционную веру, зовут ________. (Введите имя)",
+            correctAnswers: ["кугю-юмо", "кугу юмо", "кугуюмо", "kugu-yumo"],
+            explanation: "✅ Верховный бог — Кугу-Юмо. Религия называется «чимари», моления проводят жрецы-карты в священных рощах."
         },
-        {   // НОВЫЙ 7-Й ВОПРОС — про традиционную одежду
-            text: "👗 В марийском костюме женские головные уборы могли многое рассказать о владелице. Какой из уборов надевали на берестяной каркас и носили замужние женщины?",
+        { // 7 - обычная викторина (бортничество)
+            type: 'choice',
+            text: "🐝 Что такое «маскайол» у марийских пчеловодов?",
             options: [
-                "А) Шурка — высокий убор на берестяной основе, напоминающий мордовский",
-                "Б) Шымакш — конусовидный колпак с затылочной лопастью на берестяном каркасе",
-                "В) Сорока — убор, заимствованный у русских",
-                "Г) Тарпан — головное полотенце с очельем"
+                "А) Ритуальный танец",
+                "Б) Обувь с шипами для лазания на бортные деревья",
+                "В) Женский головной убор",
+                "Г) Священная роща"
             ],
             correct: 1,
-            explanation: "🧵 Шымакш — традиционный головной убор замужних марийок. Его надевали на берестяной каркас, а сзади свисала лопасть, закрывавшая шею. Шурка — более древний вариант, но именно шымакш был самым распространённым в XIX веке."
-        },
-        {   // НОВЫЙ 8-Й ВОПРОС — про языки
-            text: "🗣️ Марийский язык — живое наследие финно-угорской семьи. Какая особенность роднит его с тюркскими языками?",
-            options: [
-                "А) В нём полностью отсутствуют гласные звуки",
-                "Б) Он использует иероглифическое письмо",
-                "В) В нём множество тюркских заимствований, например приветствие «салам» и слово «Эл» (земля)",
-                "Г) Он является точной копией татарского языка"
-            ],
-            correct: 2,
-            explanation: "📖 Марийский язык впитал много тюркских слов через века соседства с татарами и чувашами. «Салам» (здравствуйте) пришло через тюркские языки из арабского, а «Эл» (земля, страна) родственно татарскому «ул». При этом марийский сохраняет финно-угорскую основу."
+            explanation: "🍯 Маскайол («медвежьи лапы») — гнутая деревянная обувь с железными шипами для подъёма на деревья ради мёда диких пчёл."
         }
     ];
 
@@ -295,9 +349,7 @@
     let score = 0;
     let gameFinished = false;
     let answerLocked = false;
-
-    // Сюжетные фрагменты легенды о Чоткар-патыре
-    let legendPieces = [];
+    let currentSortState = {}; // для сортировки
 
     const dynamicDiv = document.getElementById('dynamicContent');
     const scoreSpan = document.getElementById('scoreValue');
@@ -312,30 +364,39 @@
         }
     }
 
-    // Легендарные фрагменты
-    const legendFragments = [
-        "🌲 Давно, когда Волга была шире, а леса — непроходимее, жил могучий воин Чоткар-патыр.",
-        "⚔️ Он один сразил сто врагов, защищая священные рощи марийцев от захватчиков.",
-        "👗 Его жена славилась искусством вышивки — её узоры на головных уборах могли отвести беду.",
-        "💤 Устав от битв, он лёг спать в пещере на горе Карман-Курык, наказав разбудить его, когда марийскому народу будет грозить беда.",
-        "🗣️ Говорят, тот, кто знает язык предков, может говорить с духами леса.",
-        "🗝️ Руна, которую вы нашли — это печать Чоткар-патыря. Кто соберёт все знания о марийцах, тот получит право трижды ударить в священный барабан и призвать героя.",
-        "✨ По легенде, когда 100 знатоков марийской старины соберутся вместе, Чоткар-патыр проснётся и принесёт народу мир и процветание.",
-        "🕊️ Ваше путешествие — лишь первый шаг. Но каждый, кто помнит традиции, становится звеном в цепи, соединяющей прошлое и будущее."
-    ];
+    function normalizeAnswer(str) {
+        return str.toLowerCase().replace(/[-\s]/g, '').replace(/ё/g, 'е');
+    }
 
-    function addLegendPiece(correct) {
-        if (correct && legendPieces.length < legendFragments.length) {
-            legendPieces.push(legendFragments[legendPieces.length]);
+    function finishQuestion(points, explanation) {
+        if (answerLocked) return;
+        answerLocked = true;
+        score += points;
+        updateStatsUI();
+
+        const feedbackDiv = document.getElementById('feedbackArea');
+        if (feedbackDiv) {
+            feedbackDiv.innerHTML = `<strong>${points > 0 ? '✅ +' + points + ' очков' : '❌ 0 очков'}</strong><br>${explanation}`;
+            feedbackDiv.style.display = 'block';
+        }
+
+        const nextBtn = document.getElementById('nextQuestBtn');
+        if (nextBtn) {
+            nextBtn.style.display = 'block';
+            nextBtn.addEventListener('click', () => {
+                currentIndex++;
+                if (currentIndex < TOTAL_QS) {
+                    renderQuestion();
+                    updateStatsUI();
+                } else {
+                    finishGame();
+                }
+            }, { once: true });
         }
     }
 
-    function renderQuestion() {
-        if (currentIndex >= TOTAL_QS) {
-            finishGame();
-            return;
-        }
-        const q = questions[currentIndex];
+    // ОБЫЧНАЯ ВИКТОРИНА
+    function renderChoice(q) {
         let html = `
             <div class="question-card">
                 <div class="question-text">${q.text}</div>
@@ -353,132 +414,206 @@
         html += `
                 </div>
                 <div id="feedbackArea" class="feedback" style="display: none;"></div>
-                <button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Продолжить поиск легенды</button>
+                <button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Следующий вопрос</button>
             </div>
         `;
         dynamicDiv.innerHTML = html;
         
-        answerLocked = false;
         const answerBtns = document.querySelectorAll('.answer-btn');
         answerBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 if (answerLocked) return;
                 const selectedIdx = parseInt(btn.getAttribute('data-opt-index'));
-                handleAnswer(selectedIdx);
+                const isCorrect = (selectedIdx === q.correct);
+                finishQuestion(isCorrect ? 10 : 0, q.explanation);
+                // подсветка
+                const allBtns = document.querySelectorAll('.answer-btn');
+                allBtns.forEach((b, idx) => {
+                    b.style.pointerEvents = 'none';
+                    if (idx === q.correct) b.style.backgroundColor = '#cce6c6';
+                    if (idx === selectedIdx && idx !== q.correct) b.style.backgroundColor = '#f3cfc3';
+                });
             });
         });
     }
-    
-    function handleAnswer(selectedIdx) {
-        if (answerLocked) return;
-        answerLocked = true;
-        const q = questions[currentIndex];
-        const isCorrect = (selectedIdx === q.correct);
+
+    // ВЕРНО / НЕ ВЕРНО
+    function renderTrueFalse(q) {
+        let html = `
+            <div class="question-card">
+                <div class="question-text">${q.text}</div>
+                <div class="true-false-btns">
+                    <button id="trueBtn" class="tf-btn">✅ Верно</button>
+                    <button id="falseBtn" class="tf-btn">❌ Не верно</button>
+                </div>
+                <div id="feedbackArea" class="feedback" style="display: none;"></div>
+                <button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Следующий вопрос</button>
+            </div>
+        `;
+        dynamicDiv.innerHTML = html;
         
-        if (isCorrect) {
-            score += 10;
-            addLegendPiece(true);
-            updateStatsUI();
-        } else {
-            addLegendPiece(false);
+        document.getElementById('trueBtn').addEventListener('click', () => {
+            if (answerLocked) return;
+            const isCorrect = (q.correct === true);
+            finishQuestion(isCorrect ? 10 : 0, q.explanation);
+        });
+        document.getElementById('falseBtn').addEventListener('click', () => {
+            if (answerLocked) return;
+            const isCorrect = (q.correct === false);
+            finishQuestion(isCorrect ? 10 : 0, q.explanation);
+        });
+    }
+
+    // СОРТИРОВКА
+    function renderSort(q) {
+        let unplaced = [...q.items];
+        let placed = { "Земледелие": [], "Охота / рыболовство": [] };
+        
+        function renderSortUI() {
+            let html = `
+                <div class="question-card">
+                    <div class="question-text">${q.text}</div>
+                    <div class="sort-container">
+                        <div class="sort-category">
+                            <h4>🌾 Земледелие</h4>
+                            <div class="sort-dropzone" id="dropzone0">
+                                ${placed["Земледелие"].map(item => `<div class="sort-card" data-item="${item.name}" data-cat="Земледелие">${item.name}</div>`).join('')}
+                            </div>
+                        </div>
+                        <div class="sort-category">
+                            <h4>🏹 Охота / рыболовство</h4>
+                            <div class="sort-dropzone" id="dropzone1">
+                                ${placed["Охота / рыболовство"].map(item => `<div class="sort-card" data-item="${item.name}" data-cat="Охота / рыболовство">${item.name}</div>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; background: #e7dbbc; border-radius: 40px; padding: 10px;">
+                        <strong>📦 Не распределено:</strong>
+                        <div id="unplacedArea" style="min-height: 50px;">
+                            ${unplaced.map(item => `<div class="sort-card unplaced" data-item="${item.name}">${item.name}</div>`).join('')}
+                        </div>
+                    </div>
+                    <button id="checkSortBtn" class="next-btn" style="margin-top: 15px;">✅ Проверить сортировку</button>
+                    <div id="feedbackArea" class="feedback" style="display: none;"></div>
+                    <button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Следующий вопрос</button>
+                </div>
+            `;
+            dynamicDiv.innerHTML = html;
+            
+            // обработчики перетаскивания (упрощённо — клик)
+            document.querySelectorAll('.sort-card.unplaced').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    const itemName = card.getAttribute('data-item');
+                    const itemObj = unplaced.find(i => i.name === itemName);
+                    if (itemObj) {
+                        unplaced = unplaced.filter(i => i.name !== itemName);
+                        // по умолчанию предлагаем в первую категорию, но лучше выберем по исходной категории
+                        const targetCat = itemObj.category;
+                        placed[targetCat].push(itemObj);
+                        renderSortUI();
+                    }
+                });
+            });
+            document.querySelectorAll('.sort-card:not(.unplaced)').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    const itemName = card.getAttribute('data-item');
+                    const cat = card.getAttribute('data-cat');
+                    const itemObj = placed[cat].find(i => i.name === itemName);
+                    if (itemObj) {
+                        placed[cat] = placed[cat].filter(i => i.name !== itemName);
+                        unplaced.push(itemObj);
+                        renderSortUI();
+                    }
+                });
+            });
+            
+            document.getElementById('checkSortBtn').addEventListener('click', () => {
+                if (answerLocked) return;
+                let correctCount = 0;
+                for (let item of q.items) {
+                    const foundInCorrect = placed[item.category]?.some(i => i.name === item.name);
+                    if (foundInCorrect) correctCount++;
+                }
+                const points = (correctCount === q.items.length) ? 10 : 0;
+                finishQuestion(points, q.explanation + (points === 0 ? " Нужно разложить всё правильно." : ""));
+            });
         }
+        renderSortUI();
+    }
+
+    // ВВОД СЛОВА
+    function renderFillBlank(q) {
+        let html = `
+            <div class="question-card">
+                <div class="question-text">${q.text}</div>
+                <input type="text" id="fillInput" class="input-field" placeholder="Введите ответ...">
+                <button id="checkFillBtn" class="next-btn" style="margin-top: 0;">✅ Ответить</button>
+                <div id="feedbackArea" class="feedback" style="display: none;"></div>
+                <button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Следующий вопрос</button>
+            </div>
+        `;
+        dynamicDiv.innerHTML = html;
         
-        const feedbackDiv = document.getElementById('feedbackArea');
-        const correctLetter = String.fromCharCode(65 + q.correct);
-        const correctText = q.options[q.correct];
-        
-        let legendNote = '';
-        if (isCorrect && legendPieces.length > 0) {
-            legendNote = `<br>📜 <strong>Легенда пополняется:</strong> ${legendPieces[legendPieces.length-1]}`;
-        }
-        
-        let feedbackHtml = '';
-        if (isCorrect) {
-            feedbackHtml = `✅ <strong>Верно!</strong> ${q.explanation}<br>🌟 +10 знаний.${legendNote}`;
-        } else {
-            feedbackHtml = `❌ <strong>Неверно.</strong> Правильный ответ: ${correctLetter}) ${correctText}.<br>${q.explanation}<br>🌿 Даже ошибка — это шаг к пониманию древней культуры.`;
-        }
-        feedbackDiv.innerHTML = feedbackHtml;
-        feedbackDiv.style.display = 'block';
-        
-        const allBtns = document.querySelectorAll('.answer-btn');
-        allBtns.forEach((btn, idx) => {
-            btn.style.pointerEvents = 'none';
-            if (idx === q.correct) {
-                btn.style.backgroundColor = '#d4e6c3';
-                btn.style.borderColor = '#3f8227';
-            }
-            if (idx === selectedIdx && idx !== q.correct) {
-                btn.style.backgroundColor = '#f3cfc0';
-                btn.style.borderColor = '#b3432c';
+        document.getElementById('checkFillBtn').addEventListener('click', () => {
+            if (answerLocked) return;
+            const userAnswer = document.getElementById('fillInput').value;
+            const normalized = normalizeAnswer(userAnswer);
+            const isCorrect = q.correctAnswers.some(ca => normalizeAnswer(ca) === normalized);
+            finishQuestion(isCorrect ? 10 : 0, q.explanation);
+        });
+        document.getElementById('fillInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('checkFillBtn').click();
             }
         });
-        
-        const nextBtn = document.getElementById('nextQuestBtn');
-        nextBtn.style.display = 'block';
-        nextBtn.addEventListener('click', () => {
-            currentIndex++;
-            if (currentIndex < TOTAL_QS) {
-                renderQuestion();
-                updateStatsUI();
-            } else {
-                finishGame();
-            }
-        }, { once: true });
     }
-    
+
+    function renderQuestion() {
+        if (currentIndex >= TOTAL_QS) {
+            finishGame();
+            return;
+        }
+        answerLocked = false;
+        const q = questions[currentIndex];
+        if (q.type === 'choice') renderChoice(q);
+        else if (q.type === 'truefalse') renderTrueFalse(q);
+        else if (q.type === 'sort') renderSort(q);
+        else if (q.type === 'fillblank') renderFillBlank(q);
+    }
+
     function finishGame() {
         gameFinished = true;
-        const maxScore = TOTAL_QS * 10;
-        let endingTitle = '';
-        let endingStory = '';
-        
-        // Полная легенда (те фрагменты, что удалось собрать)
-        let fullLegend = '';
-        if (legendPieces.length > 0) {
-            fullLegend = `<div class="legend-box">📖 <strong>Сказание о Чоткар-патыре (собрано вами):</strong><br>${legendPieces.map(p => p).join(' → ')}</div>`;
+        let title = '', advice = '', emoji = '';
+        if (score === TOTAL_QS * 10) {
+            title = '🏅 Марийский профессор!';
+            advice = 'Вы — настоящий эксперт!';
+            emoji = '🎓✨';
+        } else if (score >= 50) {
+            title = '📚 Знаток марийской культуры';
+            advice = 'Очень хороший результат!';
+            emoji = '🌟';
+        } else if (score >= 30) {
+            title = '🧐 Этнограф-любитель';
+            advice = 'Неплохо! У вас есть шансы узнать подробнее о марийцах.';
+            emoji = '📖';
         } else {
-            fullLegend = `<div class="legend-box">🍂 Вы не услышали голос легенды. Но лес всё ещё ждёт.</div>`;
+            title = '🌱 Первооткрыватель';
+            advice = 'Вы сделали первые шаги. У вас есть шансы узнать подробнее о марийцах.';
+            emoji = '🔍';
         }
         
-        // Сюжетные концовки
-        if (score >= 70) {
-            endingTitle = '🏅 «Хранитель предания»';
-            endingStory = `Ваши знания — ${score} из ${maxScore}. Глубокой ночью вы возвращаетесь в священную рощу. 
-            Внезапно ветер стихает, и из тьмы выходит седой старец в белых одеждах. Это дух Чоткар-патыра. 
-            «Ты собрал мою легенду, этнограф, — говорит он. — Возьми этот резной посох. Отныне ты — хранитель марийской старины. 
-            Имя тебе отныне "Память леса". Приходи в любую священную рощу, и деревья будут шептать тебе правду». 
-            Вы просыпаетесь у костра с посохом в руке. Старейшины кланяются. Вы стали своим.`;
-        } 
-        else if (score >= 40) {
-            endingTitle = '🌿 «Ученик карта»';
-            endingStory = `Ваш результат — ${score} очков. Карт Михаил подходит к вам и кладёт руку на плечо: 
-            «Ты многое узнал, но легенда не открылась до конца. Однако я вижу огонь в твоих глазах. 
-            Оставайся в деревне на месяц. Я научу тебя играть на шувыре и различать голоса духов в ветвях. 
-            А следующей весной, быть может, Чоткар-патыр и заговорит с тобой». Вы принимаете приглашение. 
-            Вас ждёт долгая дорога в мир марийской традиции.`;
-        } 
-        else {
-            endingTitle = '🍃 «Путник с вопросом»';
-            endingStory = `У вас ${score} баллов. На рассвете старушка-марийка Анисья протягивает вам кусок ржаной лепёшки с мёдом: 
-            «Ты не разбудил богатыря, но сердце твоё не закрыто. Вот тебе оберег из конского волоса. 
-            Приезжай через год. Я покажу тебе настоящие священные рощи, куда не водят туристов. 
-            А пока — читай, слушай, впитывай. Знание не приходит в один день». Вы уезжаете с твёрдым обещанием вернуться.`;
-        }
-        
+        const maxPossible = TOTAL_QS * 10;
         const endingHtml = `
             <div class="ending">
-                <h2>🔮 Разгадка руны</h2>
-                <p style="font-size: 1.4rem; font-weight: bold;">${endingTitle}</p>
-                <p>${endingStory}</p>
-                <p><strong>Итог:</strong> ${score} / ${maxScore} знаний.</p>
-                ${fullLegend}
-                <button id="fullRestartBtn" class="restart-btn">🌲 Начать новое путешествие к Чоткар-патыру</button>
+                <h2>🎬 Завершение экспедиции</h2>
+                <p style="font-size: 1.3rem;">${emoji} ${title}</p>
+                <p>Ваш счёт: <strong>${score}</strong> из ${maxPossible} очков.</p>
+                <p>${advice}</p>
+                <p>📌 Вы узнали о марийцах: похоронные обряды, охота, цвета одежды, танцы, земледелие, религия и многое другое.</p>
+                <button id="fullRestartBtn" class="restart-btn">🔄 Пройти заново</button>
             </div>
         `;
         dynamicDiv.innerHTML = endingHtml;
-        currentQNumSpan.innerText = TOTAL_QS;
-        
         const restart = document.getElementById('fullRestartBtn');
         if (restart) {
             restart.addEventListener('click', () => {
@@ -486,11 +621,11 @@
                 score = 0;
                 gameFinished = false;
                 answerLocked = false;
-                legendPieces = [];
                 updateStatsUI();
                 renderQuestion();
             });
         }
+        currentQNumSpan.innerText = TOTAL_QS;
     }
     
     renderQuestion();
