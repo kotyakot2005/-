@@ -19,7 +19,7 @@
             margin: 0;
         }
         .game-box {
-            max-width: 880px;
+            max-width: 950px;
             width: 100%;
             background: #fef5e6;
             border-radius: 48px;
@@ -127,47 +127,51 @@
             justify-content: center;
             border-radius: 50%;
         }
-        /* Стили для drag-and-drop задания */
+        /* Drag&Drop стили */
         .drag-area {
             display: flex;
-            gap: 20px;
+            gap: 30px;
             flex-wrap: wrap;
             justify-content: center;
             margin: 20px 0;
         }
         .drag-items {
             flex: 1;
-            min-width: 180px;
+            min-width: 220px;
             background: #e8dcc2;
             border-radius: 28px;
-            padding: 15px;
+            padding: 20px;
         }
         .drop-zone {
             flex: 1;
-            min-width: 180px;
+            min-width: 260px;
             background: #e8dcc2;
             border-radius: 28px;
-            padding: 15px;
+            padding: 20px;
         }
         .draggable {
             background: #dbbc87;
-            margin: 8px 0;
-            padding: 10px;
+            margin: 10px 0;
+            padding: 12px;
             border-radius: 20px;
             cursor: grab;
             text-align: center;
             font-weight: bold;
+            transition: 0.1s;
         }
         .draggable:active { cursor: grabbing; }
+        .draggable.dragging { opacity: 0.5; }
         .drop-slot {
             background: #fef5e6;
             border: 2px dashed #a5763a;
-            margin: 8px 0;
-            padding: 10px;
+            margin: 10px 0;
+            padding: 12px;
             border-radius: 20px;
-            min-height: 50px;
+            min-height: 55px;
             text-align: center;
+            transition: 0.1s;
         }
+        .drop-slot.drag-over { background: #d4e6c3; border-color: #3f8227; }
         .drop-slot.filled { background: #cfe2cf; border: 2px solid #3f8227; }
         /* Стили для "найди лишнее" */
         .items-grid {
@@ -198,7 +202,7 @@
         }
         .match-left, .match-right {
             flex: 1;
-            min-width: 200px;
+            min-width: 220px;
         }
         .match-card {
             background: #e8dcc2;
@@ -211,7 +215,7 @@
         }
         .match-card.selected { background: #c9b06b; border: 2px solid #2c5e1a; }
         .match-card.matched { background: #a8c9a3; opacity: 0.6; cursor: default; text-decoration: line-through; }
-        .match-pair-info { text-align: center; margin-top: 15px; font-style: italic; color: #2c5e1a; }
+        .match-pair-info { text-align: center; margin-top: 15px; font-style: italic; color: #2c5e1a; font-weight: bold; }
         .feedback {
             margin-top: 20px;
             padding: 14px 20px;
@@ -259,7 +263,7 @@
             color: #b69154;
             margin-top: 22px;
         }
-        @media (max-width: 550px) {
+        @media (max-width: 650px) {
             .game-box { padding: 16px; }
             .story-header { margin: -16px -16px 20px -16px; padding: 16px; }
             .question-text { font-size: 1.2rem; }
@@ -285,8 +289,7 @@
 
 <script>
     // ============================================================
-    // 8 ВОПРОСОВ (3 из них — в интерактивном формате)
-    // Типы: 'choice' (обычный), 'dragdrop', 'oddone', 'matching'
+    // 8 ВОПРОСОВ (3 интерактивных формата)
     // ============================================================
     const questions = [
         {
@@ -303,12 +306,12 @@
         },
         {
             type: 'dragdrop',
-            text: "🏹 Луговые марийцы славились как искусные охотники. Соберите правильную ловушку для глухаря: перетащите элементы конструкции в нужном порядке.",
-            dragItems: ["Плетёная корзина", "Захлопывающаяся крышка", "Приманка (ягоды/наживка)"],
-            dropZones: ["Основание", "Механизм захлопывания", "Привлечение птицы"],
+            text: "🏹 Луговые марийцы славились как искусные охотники. Соберите правильную ловушку для глухаря: перетащите элементы конструкции в нужном порядке (все 3 элемента уникальны, порядок важен!).",
+            dragItems: ["Плетёная корзина (основание)", "Захлопывающаяся крышка", "Приманка (рябина/калина)"],
+            dropZones: ["1. Что служит основанием ловушки?", "2. Что захлопывается, когда птица заходит?", "3. Что привлекает глухаря внутрь?"],
             correctOrder: [0, 1, 2],
-            explanation: "📖 Оригинальная ловушка — плетёная корзина с захлопывающейся крышкой и приманкой внутри. Глухарь заходил за приманкой — крышка захлопывалась.",
-            feedback: "Верно! Вы собрали ловушку марийского охотника."
+            explanation: "📖 Оригинальная ловушка: плетёная корзина-основание, сверху — захлопывающаяся крышка на пружине, внутри — приманка из ягод. Глухарь заходил за приманкой — крышка захлопывалась.",
+            feedback: "Верно! Вы собрали классическую марийскую ловушку для глухаря."
         },
         {
             type: 'choice',
@@ -386,7 +389,8 @@
     let gameFinished = false;
     let answerLocked = false;
     let legendPieces = [];
-    // Для хранения состояния интерактивных заданий
+    
+    // Состояния для интерактивных заданий
     let dragState = { remainingDrags: [], remainingZones: [], assignments: [] };
     let matchState = { selectedLeft: null, matchedPairs: [] };
     let oddSelected = false;
@@ -434,7 +438,7 @@
             const letter = String.fromCharCode(65+idx);
             html += `<div class="answer-btn" data-opt-index="${idx}"><span class="answer-letter">${letter}</span><span>${opt}</span></div>`;
         });
-        html += `</div><div id="feedbackArea" class="feedback" style="display: none;"></div><button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Продолжить</button></div>`;
+        html += `</div><div id="feedbackArea" class="feedback" style="display: none;"></div><button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Продолжить поиск легенды</button></div>`;
         dynamicDiv.innerHTML = html;
         document.querySelectorAll('.answer-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -467,55 +471,115 @@
     }
 
     function renderDragDropQuestion(q) {
-        dragState = { remainingDrags: [...q.dragItems], remainingZones: [...q.dropZones], assignments: new Array(q.dropZones.length).fill(null) };
+        dragState = { 
+            remainingDrags: [...q.dragItems], 
+            remainingZones: [...q.dropZones], 
+            assignments: new Array(q.dropZones.length).fill(null) 
+        };
+        
         let html = `<div class="question-card"><div class="question-text">${q.text}</div>
-        <div class="drag-area"><div class="drag-items"><h4>📦 Элементы ловушки:</h4><div id="dragList"></div></div>
-        <div class="drop-zone"><h4>🎯 Место в конструкции:</h4><div id="dropZones"></div></div></div>
-        <div id="feedbackArea" class="feedback" style="display: none;"></div><button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Продолжить</button></div>`;
+        <div class="drag-area">
+            <div class="drag-items"><h4>📦 Элементы ловушки:</h4><div id="dragList"></div></div>
+            <div class="drop-zone"><h4>🎯 Куда их разместить?</h4><div id="dropZones"></div></div>
+        </div>
+        <div id="feedbackArea" class="feedback" style="display: none;"></div>
+        <button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Продолжить поиск легенды</button>
+        </div>`;
         dynamicDiv.innerHTML = html;
+        
         const dragContainer = document.getElementById('dragList');
         const dropContainer = document.getElementById('dropZones');
+        
         function renderDragDrop() {
             dragContainer.innerHTML = '';
             dropContainer.innerHTML = '';
+            
             dragState.remainingDrags.forEach((item, idx) => {
                 const div = document.createElement('div');
                 div.className = 'draggable';
                 div.textContent = item;
                 div.draggable = true;
-                div.ondragstart = (e) => { e.dataTransfer.setData('text/plain', item); };
+                div.setAttribute('data-item', item);
+                div.ondragstart = (e) => { 
+                    e.dataTransfer.setData('text/plain', item);
+                    div.classList.add('dragging');
+                };
+                div.ondragend = (e) => { div.classList.remove('dragging'); };
                 dragContainer.appendChild(div);
             });
+            
             dragState.remainingZones.forEach((zone, idx) => {
                 const slot = document.createElement('div');
                 slot.className = 'drop-slot';
-                slot.innerHTML = `<strong>${zone}:</strong> ${dragState.assignments[idx] ? dragState.assignments[idx] : '⬅️ перетащи сюда'}`;
                 if (dragState.assignments[idx]) slot.classList.add('filled');
-                slot.ondrop = (e) => { e.preventDefault(); const draggedItem = e.dataTransfer.getData('text/plain'); if (dragState.assignments[idx] || !dragState.remainingDrags.includes(draggedItem)) return; const dragIdx = dragState.remainingDrags.indexOf(draggedItem); if (dragIdx !== -1) { dragState.assignments[idx] = draggedItem; dragState.remainingDrags.splice(dragIdx,1); renderDragDrop(); } };
-                slot.ondragover = (e) => e.preventDefault();
+                slot.innerHTML = `<strong>${zone}</strong><br>${dragState.assignments[idx] ? `✅ ${dragState.assignments[idx]}` : '⬅️ перетащи элемент сюда'}`;
+                
+                slot.ondragover = (e) => { 
+                    e.preventDefault(); 
+                    slot.classList.add('drag-over');
+                };
+                slot.ondragleave = (e) => { slot.classList.remove('drag-over'); };
+                slot.ondrop = (e) => { 
+                    e.preventDefault();
+                    slot.classList.remove('drag-over');
+                    const draggedItem = e.dataTransfer.getData('text/plain');
+                    if (dragState.assignments[idx] !== null) return;
+                    if (!dragState.remainingDrags.includes(draggedItem)) return;
+                    const dragIdx = dragState.remainingDrags.indexOf(draggedItem);
+                    if (dragIdx !== -1) {
+                        dragState.assignments[idx] = draggedItem;
+                        dragState.remainingDrags.splice(dragIdx, 1);
+                        renderDragDrop();
+                    }
+                };
                 dropContainer.appendChild(slot);
             });
         }
+        
         renderDragDrop();
+        
         const nextBtn = document.getElementById('nextQuestBtn');
         nextBtn.onclick = () => {
             if (answerLocked) return;
+            // Проверяем, что все зоны заполнены
+            if (dragState.assignments.some(val => val === null)) {
+                const fb = document.getElementById('feedbackArea');
+                fb.innerHTML = '⚠️ Вы ещё не разместили все элементы! Перетащите все три детали ловушки в правильные места.';
+                fb.style.display = 'block';
+                return;
+            }
+            // Проверяем правильность порядка
             const isCorrect = dragState.assignments.every((val, idx) => val === q.dragItems[q.correctOrder[idx]]);
             answerLocked = true;
-            if (isCorrect) { score += 10; addLegendPiece(true); updateStatsUI(); }
-            else addLegendPiece(false);
+            if (isCorrect) { 
+                score += 10; 
+                addLegendPiece(true); 
+                updateStatsUI();
+            } else {
+                addLegendPiece(false);
+            }
             const fb = document.getElementById('feedbackArea');
             let legendNote = (isCorrect && legendPieces.length) ? `<br>📜 Легенда: ${legendPieces[legendPieces.length-1]}` : '';
-            fb.innerHTML = (isCorrect ? `✅ ${q.feedback}<br>🌟 +10 знаний.${legendNote}` : `❌ Неправильно. ${q.explanation}`);
+            if (isCorrect) {
+                fb.innerHTML = `✅ ${q.feedback}<br>🌟 +10 знаний.${legendNote}<br>${q.explanation}`;
+            } else {
+                fb.innerHTML = `❌ Неправильно. ${q.explanation}<br>Правильный порядок: 1) ${q.dragItems[0]}, 2) ${q.dragItems[1]}, 3) ${q.dragItems[2]}.`;
+            }
             fb.style.display = 'block';
             nextBtn.style.display = 'block';
+            // Убираем возможность дальнейшего перетаскивания
+            document.querySelectorAll('.draggable').forEach(el => el.draggable = false);
+            document.querySelectorAll('.drop-slot').forEach(el => {
+                el.ondrop = null;
+                el.ondragover = null;
+            });
             nextBtn.onclick = () => { currentIndex++; renderQuestion(); };
         };
     }
 
     function renderOddOneQuestion(q) {
         oddSelected = false;
-        let html = `<div class="question-card"><div class="question-text">${q.text}</div><div class="items-grid" id="oddGrid"></div><div id="feedbackArea" class="feedback" style="display: none;"></div><button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Продолжить</button></div>`;
+        let html = `<div class="question-card"><div class="question-text">${q.text}</div><div class="items-grid" id="oddGrid"></div><div id="feedbackArea" class="feedback" style="display: none;"></div><button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Продолжить поиск легенды</button></div>`;
         dynamicDiv.innerHTML = html;
         const grid = document.getElementById('oddGrid');
         q.items.forEach((item, idx) => {
@@ -528,10 +592,10 @@
                 const isCorrect = (idx === q.correctIndex);
                 if (isCorrect) { score += 10; addLegendPiece(true); updateStatsUI(); }
                 else addLegendPiece(false);
-                div.classList.add('selected-wrong');
+                if (!isCorrect) div.classList.add('selected-wrong');
                 const fb = document.getElementById('feedbackArea');
                 let legendNote = (isCorrect && legendPieces.length) ? `<br>📜 Легенда: ${legendPieces[legendPieces.length-1]}` : '';
-                fb.innerHTML = (isCorrect ? `✅ Верно! ${q.items[q.correctIndex]} — лишнее.<br>${q.explanation}<br>🌟 +10 знаний.${legendNote}` : `❌ Неверно. Лишнее — ${q.items[q.correctIndex]}.<br>${q.explanation}`);
+                fb.innerHTML = (isCorrect ? `✅ Верно! "${q.items[q.correctIndex]}" — лишнее.<br>${q.explanation}<br>🌟 +10 знаний.${legendNote}` : `❌ Неверно. Лишнее — "${q.items[q.correctIndex]}".<br>${q.explanation}`);
                 fb.style.display = 'block';
                 document.getElementById('nextQuestBtn').style.display = 'block';
             };
@@ -544,15 +608,21 @@
     function renderMatchingQuestion(q) {
         matchState = { selectedLeft: null, matchedPairs: [], leftItems: [...q.leftItems], rightItems: [...q.rightItems] };
         let html = `<div class="question-card"><div class="question-text">${q.text}</div>
-        <div class="match-area"><div class="match-left"><h4>🎩 Головные уборы:</h4><div id="leftList"></div></div>
-        <div class="match-right"><h4>📝 Описания:</h4><div id="rightList"></div></div></div>
+        <div class="match-area">
+            <div class="match-left"><h4>🎩 Головные уборы:</h4><div id="leftList"></div></div>
+            <div class="match-right"><h4>📝 Описания:</h4><div id="rightList"></div></div>
+        </div>
         <div id="matchInfo" class="match-pair-info"></div>
-        <div id="feedbackArea" class="feedback" style="display: none;"></div><button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Продолжить</button></div>`;
+        <div id="feedbackArea" class="feedback" style="display: none;"></div>
+        <button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Продолжить поиск легенды</button>
+        </div>`;
         dynamicDiv.innerHTML = html;
+        
         function renderMatch() {
             const leftDiv = document.getElementById('leftList');
             const rightDiv = document.getElementById('rightList');
             leftDiv.innerHTML = ''; rightDiv.innerHTML = '';
+            
             matchState.leftItems.forEach((item, idx) => {
                 const card = document.createElement('div');
                 card.className = 'match-card';
@@ -560,12 +630,20 @@
                 card.textContent = item;
                 card.onclick = () => {
                     if (matchState.matchedPairs.some(p => p.leftIdx === idx)) return;
-                    if (matchState.selectedLeft === idx) { matchState.selectedLeft = null; document.getElementById('matchInfo').innerHTML = ''; renderMatch(); }
-                    else { matchState.selectedLeft = idx; document.getElementById('matchInfo').innerHTML = `👉 Выбрано: "${item}". Теперь кликните на описание.`; renderMatch(); }
+                    if (matchState.selectedLeft === idx) { 
+                        matchState.selectedLeft = null; 
+                        document.getElementById('matchInfo').innerHTML = ''; 
+                        renderMatch(); 
+                    } else { 
+                        matchState.selectedLeft = idx; 
+                        document.getElementById('matchInfo').innerHTML = `👉 Выбрано: "${item}". Теперь кликните на подходящее описание.`; 
+                        renderMatch(); 
+                    }
                 };
                 if (matchState.selectedLeft === idx) card.classList.add('selected');
                 leftDiv.appendChild(card);
             });
+            
             matchState.rightItems.forEach((item, idx) => {
                 const card = document.createElement('div');
                 card.className = 'match-card';
@@ -582,10 +660,14 @@
                             document.getElementById('matchInfo').innerHTML = '✅ Сопоставлено верно!';
                             renderMatch();
                             if (matchState.matchedPairs.length === q.leftItems.length) {
-                                document.getElementById('feedbackArea').innerHTML = `✅ Отлично! Все уборы сопоставлены!<br>${q.explanation}<br>🌟 +10 знаний.`;
-                                document.getElementById('feedbackArea').style.display = 'block';
+                                const fb = document.getElementById('feedbackArea');
+                                let legendNote = (legendPieces.length) ? `<br>📜 Легенда: ${legendFragments[legendPieces.length] || legendFragments[legendFragments.length-1]}` : '';
+                                fb.innerHTML = `✅ Отлично! Все уборы сопоставлены!<br>${q.explanation}<br>🌟 +10 знаний.${legendNote}`;
+                                fb.style.display = 'block';
                                 document.getElementById('nextQuestBtn').style.display = 'block';
-                                score += 10; addLegendPiece(true); updateStatsUI();
+                                score += 10; 
+                                addLegendPiece(true); 
+                                updateStatsUI();
                                 answerLocked = true;
                             }
                         } else {
@@ -599,8 +681,18 @@
             });
         }
         renderMatch();
+        
         const nextBtn = document.getElementById('nextQuestBtn');
-        nextBtn.onclick = () => { currentIndex++; renderQuestion(); };
+        nextBtn.onclick = () => { 
+            if (!answerLocked) {
+                const fb = document.getElementById('feedbackArea');
+                fb.innerHTML = '⚠️ Сначала сопоставьте все головные уборы с описаниями!';
+                fb.style.display = 'block';
+                return;
+            }
+            currentIndex++; 
+            renderQuestion(); 
+        };
     }
 
     function finishGame() {
