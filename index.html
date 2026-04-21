@@ -127,60 +127,29 @@
             justify-content: center;
             border-radius: 50%;
         }
-        /* Стили для 2-го испытания — сборка снаряжения */
-        .gear-assembly {
+        /* Стили для 2-го испытания — выбор предметов */
+        .items-select-grid {
             display: flex;
-            gap: 30px;
             flex-wrap: wrap;
+            gap: 15px;
             justify-content: center;
             margin: 20px 0;
         }
-        .gear-items {
-            flex: 1;
-            min-width: 220px;
+        .select-item {
             background: #e8dcc2;
-            border-radius: 28px;
-            padding: 20px;
-        }
-        .gear-slot {
-            background: #fef5e6;
-            border: 2px dashed #a5763a;
-            margin: 12px 0;
-            padding: 12px;
-            border-radius: 20px;
-            text-align: center;
+            padding: 15px 20px;
+            border-radius: 40px;
             cursor: pointer;
+            text-align: center;
             transition: 0.1s;
-        }
-        .gear-slot:hover { background: #efe1c7; }
-        .gear-slot.selected { background: #c9b06b; border: 2px solid #2c5e1a; }
-        .gear-slot.filled { background: #cfe2cf; border: 2px solid #3f8227; cursor: default; }
-        .gear-slot.filled:hover { background: #cfe2cf; }
-        .gear-description {
-            font-size: 0.85rem;
-            color: #5a3e28;
-            margin-top: 5px;
-        }
-        .items-pool {
+            font-weight: 500;
             flex: 1;
-            min-width: 220px;
-            background: #e8dcc2;
-            border-radius: 28px;
-            padding: 20px;
+            min-width: 160px;
         }
-        .item-card {
-            background: #dbbc87;
-            margin: 10px 0;
-            padding: 12px;
-            border-radius: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.1s;
-            font-weight: bold;
-        }
-        .item-card:hover { background: #c9a86b; transform: scale(1.02); }
-        .item-card.used { background: #a8c9a3; opacity: 0.5; cursor: default; text-decoration: line-through; }
-        .item-card.used:hover { transform: none; }
+        .select-item:hover { background: #dbbc87; transform: scale(1.02); }
+        .select-item.selected-correct { background: #a8c9a3; border: 2px solid #2c6e2c; cursor: default; }
+        .select-item.selected-wrong { background: #f3cfc0; border: 2px solid #b3432c; text-decoration: line-through; cursor: default; }
+        .select-item.disabled { opacity: 0.6; cursor: default; }
         /* Стили для "найди лишнее" */
         .items-grid {
             display: flex;
@@ -275,7 +244,6 @@
             .game-box { padding: 16px; }
             .story-header { margin: -16px -16px 20px -16px; padding: 16px; }
             .question-text { font-size: 1.2rem; }
-            .gear-assembly { flex-direction: column; }
             .match-area { flex-direction: column; }
         }
     </style>
@@ -297,7 +265,7 @@
 
 <script>
     // ============================================================
-    // 8 ВОПРОСОВ (все типы: choice, gears, oddone, matching)
+    // 8 ВОПРОСОВ (2-е — простой выбор предметов)
     // ============================================================
     const questions = [
         {
@@ -313,23 +281,18 @@
             explanation: "✨ По верованиям мари, в царстве мёртвых душе нужны ногти, чтобы карабкаться по горам, шиповник — отогнать стража-змея, а по холсту перейти в загробный мир."
         },
         {
-            type: 'gears',
-            text: "🏹 Перед охотой на медведя марийский охотник должен правильно собрать своё снаряжение. Выберите из предложенных предметов ТРИ, которые действительно использовали марийцы, и разместите их в нужных слотах:",
-            gearSlots: [
-                { name: "Оружие для ближнего боя", description: "Чем мариец добивал медведя в опасной близости?" },
-                { name: "Оружие для дистанционного удара", description: "Что использовали, чтобы поразить зверя издалека, не испортив шкуру?" },
-                { name: "Специальная обувь", description: "В чём лазали на высокие деревья за мёдом (это же пригодилось и в охоте)?" }
-            ],
-            itemsPool: [
-                { name: "Нож и рогатина", correct: true, slotIndex: 0 },
-                { name: "Лук со стрелами", correct: true, slotIndex: 1 },
-                { name: "Маскайол (обувь с шипами)", correct: true, slotIndex: 2 },
-                { name: "Огнестрельное ружьё", correct: false, slotIndex: null },
-                { name: "Капкан-давилка", correct: false, slotIndex: null },
-                { name: "Отравленные стрелы", correct: false, slotIndex: null }
+            type: 'multiselect',
+            text: "🏹 Какое снаряжение использовали марийские охотники? Выберите ТРИ правильных предмета из шести.",
+            items: [
+                { name: "Нож и рогатина", correct: true },
+                { name: "Лук со стрелами", correct: true },
+                { name: "Маскайол (обувь с шипами)", correct: true },
+                { name: "Огнестрельное ружьё", correct: false },
+                { name: "Капкан-давилка", correct: false },
+                { name: "Отравленные стрелы", correct: false }
             ],
             explanation: "📖 Марийцы славились как отличные охотники: не боялись медведя, били его ножом и рогатиной, стреляли из лука в голову, чтобы не испортить шкурку. А маскайол — «медвежьи лапы» — обувь с шипами для лазания на деревья за мёдом.",
-            feedback: "Верно! Вы собрали правильное снаряжение марийского охотника."
+            feedback: "Верно! Вы отлично знаете снаряжение марийского охотника."
         },
         {
             type: 'choice',
@@ -409,7 +372,7 @@
     let legendPieces = [];
     
     // Состояния для интерактивных заданий
-    let gearState = { slots: [], availableItems: [], selectedSlot: null };
+    let multiselectState = { selected: [], correctCount: 0 };
     let matchState = { selectedLeft: null, matchedPairs: [] };
     let oddSelected = false;
 
@@ -445,7 +408,7 @@
         const q = questions[currentIndex];
         answerLocked = false;
         if (q.type === 'choice') renderChoiceQuestion(q);
-        else if (q.type === 'gears') renderGearQuestion(q);
+        else if (q.type === 'multiselect') renderMultiselectQuestion(q);
         else if (q.type === 'oddone') renderOddOneQuestion(q);
         else if (q.type === 'matching') renderMatchingQuestion(q);
     }
@@ -488,93 +451,86 @@
         nextBtn.onclick = () => { currentIndex++; renderQuestion(); };
     }
 
-    // 2-е ИСПЫТАНИЕ — сборка снаряжения
-    function renderGearQuestion(q) {
-        gearState = {
-            slots: q.gearSlots.map((slot, idx) => ({ ...slot, filledWith: null, filled: false })),
-            availableItems: q.itemsPool.map(item => ({ ...item, used: false })),
-            selectedSlot: null
+    // НОВОЕ 2-Е ЗАДАНИЕ — мультивыбор (кликабельные карточки)
+    function renderMultiselectQuestion(q) {
+        multiselectState = { 
+            selected: new Array(q.items.length).fill(false),
+            correctCount: q.items.filter(item => item.correct).length
         };
         
         let html = `<div class="question-card"><div class="question-text">${q.text}</div>
-        <div class="gear-assembly">
-            <div class="gear-items"><h4>🎯 Снаряжение охотника:</h4><div id="gearSlots"></div></div>
-            <div class="items-pool"><h4>📦 Доступные предметы:</h4><div id="itemsPool"></div></div>
-        </div>
+        <div class="items-select-grid" id="multiselectGrid"></div>
         <div id="feedbackArea" class="feedback" style="display: none;"></div>
-        <button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Проверить и продолжить</button>
+        <button id="checkMultiselectBtn" class="next-btn">✅ Проверить ответ</button>
+        <button id="nextQuestBtn" class="next-btn" style="display: none;">➡️ Продолжить поиск легенды</button>
         </div>`;
         dynamicDiv.innerHTML = html;
         
-        function renderGear() {
-            const slotsContainer = document.getElementById('gearSlots');
-            const itemsContainer = document.getElementById('itemsPool');
-            if (!slotsContainer || !itemsContainer) return;
-            slotsContainer.innerHTML = '';
-            itemsContainer.innerHTML = '';
-            
-            gearState.slots.forEach((slot, idx) => {
-                const slotDiv = document.createElement('div');
-                slotDiv.className = 'gear-slot';
-                if (gearState.selectedSlot === idx) slotDiv.classList.add('selected');
-                if (slot.filled) slotDiv.classList.add('filled');
-                slotDiv.innerHTML = `<strong>${slot.name}</strong><div class="gear-description">${slot.description}</div>
-                ${slot.filled ? `<div style="margin-top:8px;">✅ ${slot.filledWith}</div>` : '⬅️ кликни, чтобы выбрать'}`;
-                if (!slot.filled) {
-                    slotDiv.onclick = () => {
-                        if (answerLocked) return;
-                        gearState.selectedSlot = idx;
-                        renderGear();
-                    };
-                }
-                slotsContainer.appendChild(slotDiv);
-            });
-            
-            gearState.availableItems.forEach((item, idx) => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'item-card';
-                if (item.used) itemDiv.classList.add('used');
-                itemDiv.textContent = item.name;
-                if (!item.used && gearState.selectedSlot !== null && !answerLocked) {
-                    itemDiv.onclick = () => {
-                        if (answerLocked) return;
-                        const slotIdx = gearState.selectedSlot;
-                        if (gearState.slots[slotIdx].filled) return;
-                        gearState.slots[slotIdx].filledWith = item.name;
-                        gearState.slots[slotIdx].filled = true;
-                        gearState.availableItems[idx].used = true;
-                        gearState.selectedSlot = null;
-                        renderGear();
-                    };
-                }
-                itemsContainer.appendChild(itemDiv);
-            });
-        }
+        const grid = document.getElementById('multiselectGrid');
         
-        renderGear();
+        q.items.forEach((item, idx) => {
+            const div = document.createElement('div');
+            div.className = 'select-item';
+            div.textContent = item.name;
+            div.onclick = () => {
+                if (answerLocked) return;
+                // Переключаем выделение
+                if (multiselectState.selected[idx]) {
+                    multiselectState.selected[idx] = false;
+                    div.classList.remove('selected-correct', 'selected-wrong');
+                } else {
+                    multiselectState.selected[idx] = true;
+                    // Визуально пока не показываем правильно/неправильно
+                    div.style.background = "#c9b06b";
+                }
+            };
+            grid.appendChild(div);
+        });
         
-        const nextBtn = document.getElementById('nextQuestBtn');
-        nextBtn.onclick = () => {
+        const checkBtn = document.getElementById('checkMultiselectBtn');
+        checkBtn.onclick = () => {
             if (answerLocked) return;
-            // Проверяем, что все слоты заполнены
-            if (gearState.slots.some(slot => !slot.filled)) {
+            
+            // Подсчитываем выбранные предметы
+            const selectedIndices = [];
+            multiselectState.selected.forEach((sel, idx) => {
+                if (sel) selectedIndices.push(idx);
+            });
+            
+            // Проверяем, что выбрано ровно 3 предмета
+            if (selectedIndices.length !== 3) {
                 const fb = document.getElementById('feedbackArea');
-                fb.innerHTML = '⚠️ Вы ещё не собрали всё снаряжение! Заполните все три слота правильными предметами.';
+                fb.innerHTML = '⚠️ Вы должны выбрать ровно ТРИ предмета! Вспомните, какое снаряжение использовали марийские охотники.';
                 fb.style.display = 'block';
                 return;
             }
-            // Проверяем правильность выбора предметов
+            
+            // Проверяем правильность выбора
             let allCorrect = true;
-            for (let i = 0; i < gearState.slots.length; i++) {
-                const filledItem = gearState.slots[i].filledWith;
-                const correctItem = q.itemsPool.find(item => item.slotIndex === i && item.correct);
-                if (!correctItem || correctItem.name !== filledItem) {
+            for (let i = 0; i < multiselectState.selected.length; i++) {
+                const isItemCorrect = q.items[i].correct;
+                if (multiselectState.selected[i] !== isItemCorrect) {
                     allCorrect = false;
                     break;
                 }
             }
             
             answerLocked = true;
+            
+            // Визуально показываем правильные/неправильные ответы
+            const itemsDivs = document.querySelectorAll('.select-item');
+            q.items.forEach((item, idx) => {
+                if (item.correct) {
+                    itemsDivs[idx].classList.add('selected-correct');
+                    itemsDivs[idx].style.background = "#a8c9a3";
+                } else if (multiselectState.selected[idx] && !item.correct) {
+                    itemsDivs[idx].classList.add('selected-wrong');
+                    itemsDivs[idx].style.background = "#f3cfc0";
+                }
+                itemsDivs[idx].classList.add('disabled');
+                itemsDivs[idx].onclick = null;
+            });
+            
             if (allCorrect) { 
                 score += 10; 
                 addLegendPiece(true); 
@@ -582,14 +538,19 @@
             } else {
                 addLegendPiece(false);
             }
+            
             const fb = document.getElementById('feedbackArea');
             let legendNote = (allCorrect && legendPieces.length) ? `<br>📜 Легенда: ${legendPieces[legendPieces.length-1]}` : '';
+            const correctItems = q.items.filter(i => i.correct).map(i => i.name).join(', ');
+            
             if (allCorrect) {
                 fb.innerHTML = `✅ ${q.feedback}<br>🌟 +10 знаний.${legendNote}<br>${q.explanation}`;
             } else {
-                fb.innerHTML = `❌ Неправильно. ${q.explanation}<br>Правильные предметы: 1) Нож и рогатина, 2) Лук со стрелами, 3) Маскайол (обувь с шипами).`;
+                fb.innerHTML = `❌ Неправильно. Правильные предметы: ${correctItems}.<br>${q.explanation}`;
             }
             fb.style.display = 'block';
+            checkBtn.style.display = 'none';
+            const nextBtn = document.getElementById('nextQuestBtn');
             nextBtn.style.display = 'block';
             nextBtn.onclick = () => { currentIndex++; renderQuestion(); };
         };
